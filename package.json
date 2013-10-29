@@ -1,0 +1,25 @@
+{
+  "author": "Charlton Roberts",
+  "name": "hipchatter",
+  "description": "Wrapper for the HipChat API (v2)",
+  "version": "0.0.1",
+  "keywords": [
+    "hipchat",
+    "hip",
+    "chat",
+    "hip",
+    "atlassian",
+    "hipchatter",
+    "api"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/charltoons/hipchatter.git"
+  },
+  "main": "hipchatter.js",
+  "dependencies": {
+  },
+  "engines": {
+    "node": "*"
+  }
+}
