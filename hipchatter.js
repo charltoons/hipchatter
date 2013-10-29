@@ -1,84 +1,33 @@
 //  Endpoints
-var MW_ROOT = 'http://www.dictionaryapi.com/api/v1/references/collegiate/xml/';
+var API_ROOT = 'https://api.hipchat.com/v2/';
 
 //  Dependencies
-var request = require('request'),
-    xml     = require('xml2js');
+var request = require('request');
+var path = require('path');
   
-//  Dictionary constructor
-var Dictionary = function (config) {  
-    this.key = config.key;
+//  Hipchatter constructor
+var Hipchatter = function(token) {  
+    this.token = token;
 }
 
-//  Dictionary functions
-Dictionary.prototype = {
+//  Hipchatter functions
+Hipchatter.prototype = {
 
-    //returns a word's definition
-    define: function(word, callback){
-        this.raw(word, function(error, result){
-            if (error === null) {
-                var results = [];
-
-                if (result.entry_list.entry != undefined) {
-                    var entries = result.entry_list.entry;
-                    for (var i=0; i<entries.length; i++){
-
-                        //remove erroneous results (doodle != Yankee Doodle)
-                        if (entries[i].ew == word) {
-
-                            //construct a more digestable object
-                            var definition = entries[i].def[0].dt;
-                            var partOfSpeech = entries[i].fl;
-                            switch (typeof definition) {
-                                case "object":
-                                    for (var i=0; i<definition.length; i++){
-                                        var definitionStr = "";
-                                        if (definition[i]["_"].length > 1) definitionStr += " "+definition[i]["_"];
-                                    }
-                                    definition = definitionStr;
-                                    break;
-                                case "string":
-                                default:
-                                    break;
-                            }
-                            results.push({
-                                partOfSpeech: partOfSpeech,
-                                definition: definition
-                            });
-                        }
-                    }
-                    callback(null, results);
-                }
-                else if (result.entry_list.suggestion != undefined) {
-                    callback('suggestions', result.entry_list.suggestion);
-                }
-                
-            }
-            else callback(error);
-        });
-    },
-
-    //return a javascript object equivalent to the XML response from M-W
-    raw: function(word, callback){
-        request(this.getSearchUrl(word), function (error, response, body) {
+    // Get all rooms
+    rooms: function(callback){
+        request(this.url('room'), function (error, response, body) {
             if (!error && response.statusCode == 200) {
-                xml.parseString(body, function(error, result){
-                    if (error === null) callback(null, result);
-                    else if (response.statusCode != 200) console.log(response.statusCode);
-                    else {
-                        console.log(error);
-                        callback('XML Parsing error.');
-                    }
-                });
+                console.log(error, response, body);
+                callback(null);
             }
-            else callback('API connection error.')
+            else callback(error, 'API connection error.');
         });
     },
 
-    //constructs the search url
-    getSearchUrl: function(word){
-        return MW_ROOT+word+'?key='+this.key;
+    // Generator API url
+    url: function(rest_path){
+        return API_ROOT + '/' + rest_path +'?auth_token='+this.token;
     }
 }
 
-module.exports = Dictionary;
+module.exports = Hipchatter;
