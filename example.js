@@ -8,6 +8,11 @@ var key = process.argv[2];
 var hipchatter = new Hipchatter(key);
 
 //sample method
-hipchatter.rooms(function(err, rooms){
-    console.log(err);
+// hipchatter.rooms(function(err, rooms){
+//     if (err) console.log(err);
+//     console.log(rooms);
+// });
+
+hipchatter.history('Pilot.is', function(err, rooms){
+    console.log(rooms);
 });

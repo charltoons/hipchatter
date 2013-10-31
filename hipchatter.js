@@ -15,18 +15,34 @@ Hipchatter.prototype = {
 
     // Get all rooms
     rooms: function(callback){
-        request(this.url('room'), function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                console.log(error, response, body);
-                callback(null);
-            }
-            else callback(error, 'API connection error.');
+        this.request('room', function(err, results){
+            if (err) callback(err);
+            else callback(err, JSON.parse(results).items);
+        });
+    },
+
+    // Get history from room
+    // Takes either a room id or room name as a parameter
+    history: function(room, callback){
+        this.request('room/'+room+'/history', function(err, results){
+            if (err) callback(err);
+            else callback(err, JSON.parse(results));
         });
     },
 
     // Generator API url
     url: function(rest_path){
         return API_ROOT + '/' + rest_path +'?auth_token='+this.token;
+    },
+
+    // Make a request
+    request: function(path, callback){
+        request(this.url(path), function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                callback(null, body);
+            }
+            else callback(error, 'API connection error.');
+        });
     }
 }
 
