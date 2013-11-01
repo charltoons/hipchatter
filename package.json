@@ -17,8 +17,7 @@
     "url": "https://github.com/charltoons/hipchatter.git"
   },
   "main": "hipchatter.js",
-  "dependencies": {
-  },
+  "dependencies": {},
   "engines": {
     "node": "*"
   }
