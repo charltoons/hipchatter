@@ -13,6 +13,6 @@ var hipchatter = new Hipchatter(key);
 //     console.log(rooms);
 // });
 
-hipchatter.history('<insert room name here>', function(err, rooms){
+hipchatter.history('Projeqt Command Test', function(err, rooms){
     console.log(rooms);
 });

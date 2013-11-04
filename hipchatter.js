@@ -32,7 +32,7 @@ Hipchatter.prototype = {
 
     // Generator API url
     url: function(rest_path){
-        return API_ROOT + '/' + rest_path +'?auth_token='+this.token;
+        return API_ROOT + '/' + escape(rest_path) +'?auth_token='+this.token;
     },
 
     // Make a request
