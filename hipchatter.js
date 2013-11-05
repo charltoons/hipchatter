@@ -2,8 +2,6 @@
 var API_ROOT = 'https://api.hipchat.com/v2/';
 
 //  Dependencies
-var request = require('request');
-var path = require('path');
 var needle = require('needle');
   
 //  Hipchatter constructor
@@ -18,7 +16,7 @@ Hipchatter.prototype = {
     rooms: function(callback){
         this.request('room', function(err, results){
             if (err) callback(err);
-            else callback(err, JSON.parse(results).items);
+            else callback(err, results.items);
         });
     },
 
@@ -27,7 +25,7 @@ Hipchatter.prototype = {
     history: function(room, callback){
         this.request('room/'+room+'/history', function(err, results){
             if (err) callback(err);
-            else callback(err, JSON.parse(results));
+            else callback(err, results);
         });
     },
 
@@ -52,7 +50,7 @@ Hipchatter.prototype = {
 
     // Make a request
     request: function(path, callback){
-        request(this.url(path), function (error, response, body) {
+        needle.get(this.url(path), function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 callback(null, body);
             }
