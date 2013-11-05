@@ -13,6 +13,10 @@ var hipchatter = new Hipchatter(key);
 //     console.log(rooms);
 // });
 
-hipchatter.history('Projeqt Command Test', function(err, rooms){
-    console.log(rooms);
-});
+// hipchatter.history('Projeqt Command Test', function(err, rooms){
+//     console.log(rooms);
+// });
+
+hipchatter.notify('Projeqt Command Test', 'Test Message', '<room notification token>', function(err, result){
+    console.log(err, results);
+})
