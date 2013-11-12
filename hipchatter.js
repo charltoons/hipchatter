@@ -42,6 +42,35 @@ Hipchatter.prototype = {
         });
     },
 
+    //TODO Endpoints
+    // Capabilities
+    //// Get capabilities
+    // Emoticons
+    //// Get all emoticons
+    //// Get emoticon
+    // OAuth
+    //// Generate Token
+    // Rooms
+    //// Create room
+    //// Send room notification
+    //// Get room
+    //// Delete room
+    //// Create webhook
+    //// Get all webhooks
+    //// Set topic
+    //// Delete webhook
+    //// Get webhook
+    //// Invite User
+    // Users
+    //// Private message user
+    //// Update user
+    //// Delete user
+    //// View User
+    //// Create user
+    //// Get all users
+
+    /** HELPERS **/
+
     // Generator API url
     url: function(rest_path, alternate_token){
         var token = (alternate_token == undefined)? this.token : alternate_token;
@@ -57,6 +86,7 @@ Hipchatter.prototype = {
             else callback(error, 'API connection error.');
         });
     }
+    /** END HELPERS **/
 }
 
 module.exports = Hipchatter;
