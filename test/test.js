@@ -44,26 +44,61 @@ describe('Helpers', function(){
 
 /** ENDPOINTS **/
 describe('Enpoints', function(){
+
+    // Get all rooms
     describe('Get all rooms', function(){
-        it('should not return an error', function(done){
-            hipchatter.rooms(function(err, rooms){
-                expect(err).to.be.null;
+        
+        // Set scope for the responses
+        var err, rooms;
+
+        // Make the request
+        before(function(done){
+            hipchatter.rooms(function(_err, _rooms){
+                err = _err;
+                rooms = _rooms;
                 done();
             });
         });
-        it('should return a list of rooms', function(done){
-            hipchatter.rooms(function(err, rooms){
-                expect(rooms).to.be.ok;
-                expect(rooms).to.not.be.empty;
+        it('should not return an error', function(){
+            expect(err).to.be.null;
+        });
+        it('should return a list of rooms', function(){
+            expect(rooms).to.be.ok;
+            expect(rooms).to.not.be.empty;
+        });
+        it('should return rooms that have an id and name, at least', function(){
+            expect(rooms[0]).to.have.property('name');
+            expect(rooms[0]).to.have.property('id');
+        });
+    });
+
+    // Get the history of a room
+    describe('View history', function(){
+        // Set scope for the responses
+        var err, history;
+
+        // Make the request
+        before(function(done){
+            hipchatter.history(settings.test_room, function(_err, _history){
+                err = _err;
+                history = _history;
                 done();
             });
         });
-        it('should return rooms that have an id and name, at least', function(done){
-            hipchatter.rooms(function(err, rooms){
-                expect(rooms[0]).to.have.property('name');
-                expect(rooms[0]).to.have.property('id');
+        it('should not return an error', function(){
+            expect(err).to.be.null;
+        });
+        it('should return the correct history of the room', function(){
+            expect(history).to.have.property('items');
+            expect(history.items).to.not.be.empty;
+            expect(history.items[0]).to.have.property('message');
+        });
+        it('should return an error if the room does not exist', function(done){
+            hipchatter.history('non-existent room', function(_err, msg){
+                err = _err;
+                expect(msg).to.equal('Room not found');
                 done();
             });
-        });
+        })
     });
 });

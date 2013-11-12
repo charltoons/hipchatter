@@ -13,6 +13,7 @@ var Hipchatter = function(token) {
 Hipchatter.prototype = {
 
     // Get all rooms
+    // https://www.hipchat.com/docs/apiv2/method/get_all_rooms
     rooms: function(callback){
         this.request('room', function(err, results){
             if (err) callback(err);
@@ -22,11 +23,9 @@ Hipchatter.prototype = {
 
     // Get history from room
     // Takes either a room id or room name as a parameter
+    // https://www.hipchat.com/docs/apiv2/method/view_history
     history: function(room, callback){
-        this.request('room/'+room+'/history', function(err, results){
-            if (err) callback(err);
-            else callback(err, results);
-        });
+        this.request('room/'+room+'/history', callback);
     },
 
     // Uses the simple "Room notification" token
@@ -80,10 +79,20 @@ Hipchatter.prototype = {
     // Make a request
     request: function(path, callback){
         needle.get(this.url(path), function (error, response, body) {
-            if (!error && response.statusCode == 200) {
+            
+            // Connection error
+            if (!!error) callback(true, 'HipChat API Error.');
+
+            // HipChat returned an error or error status code
+            else if (body.hasOwnProperty('error') || response.statusCode != 200){
+                try { callback(true, body.error.message); }
+                catch (e) {callback(true, body); }
+            }
+
+            // Everything worked
+            else {
                 callback(null, body);
             }
-            else callback(error, 'API connection error.');
         });
     }
     /** END HELPERS **/
