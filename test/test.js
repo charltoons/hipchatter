@@ -18,6 +18,7 @@ describe('Creating hipchatter object', function(){
     it('should exists and be an object', function(){
       expect(hipchatter).to.exist;
       expect(hipchatter).to.be.an('object');
+      expect(hipchatter).to.be.instanceof(Hipchatter);
     });
   });
 });
@@ -32,13 +33,37 @@ describe('Helpers', function(){
             expect(url).to.contain(settings.apikey);
             expect(url).to.contain('hipchat');
         });
-    });
-    describe('url alternate token', function(){
-        var url = hipchatter.url('room/history', 'exampletoken');
+        alturl = hipchatter.url('room/history', 'exampletoken');
         it('should return a valid URL with the alternate token', function(){
-            expect(url).to.be.a('string');
-            expect(url).to.contain('exampletoken');
-            expect(url).to.contain('hipchat');
+            expect(alturl).to.be.a('string');
+            expect(alturl).to.contain('exampletoken');
+            expect(alturl).to.contain('hipchat');
+        });
+    });
+});
+
+/** ENDPOINTS **/
+describe('Enpoints', function(){
+    describe('Get all rooms', function(){
+        it('should not return an error', function(done){
+            hipchatter.rooms(function(err, rooms){
+                expect(err).to.be.null;
+                done();
+            });
+        });
+        it('should return a list of rooms', function(done){
+            hipchatter.rooms(function(err, rooms){
+                expect(rooms).to.be.ok;
+                expect(rooms).to.not.be.empty;
+                done();
+            });
+        });
+        it('should return rooms that have an id and name, at least', function(done){
+            hipchatter.rooms(function(err, rooms){
+                expect(rooms[0]).to.have.property('name');
+                expect(rooms[0]).to.have.property('id');
+                done();
+            });
         });
     });
 });
