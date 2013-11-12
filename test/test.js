@@ -33,4 +33,12 @@ describe('Helpers', function(){
             expect(url).to.contain('hipchat');
         });
     });
+    describe('url alternate token', function(){
+        var url = hipchatter.url('room/history', 'exampletoken');
+        it('should return a valid URL with the alternate token', function(){
+            expect(url).to.be.a('string');
+            expect(url).to.contain('exampletoken');
+            expect(url).to.contant('hipchat');
+        });
+    });
 });
