@@ -38,7 +38,7 @@ describe('Helpers', function(){
         it('should return a valid URL with the alternate token', function(){
             expect(url).to.be.a('string');
             expect(url).to.contain('exampletoken');
-            expect(url).to.contant('hipchat');
+            expect(url).to.contain('hipchat');
         });
     });
 });
