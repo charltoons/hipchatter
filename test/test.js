@@ -99,6 +99,48 @@ describe('Enpoints', function(){
                 expect(msg).to.equal('Room not found');
                 done();
             });
-        })
+        });
+    });
+
+    // Send room notification
+    describe('Room notification', function(){
+
+        it('should throw an error if no object is passed', function(done){
+            hipchatter.notify(settings.test_room, function(err, response, body){
+                expect(err).to.be.true;
+                expect(response).to.contain('options');
+                done();
+            });
+        });
+
+        it('should throw an error if required options aren\'t passed', function(done){
+
+           hipchatter.notify(settings.test_room, {message: "No Auth token"}, function(err, response){
+                expect(err).to.be.true;
+                expect(response).to.contain('token');
+                done();
+            });
+        });
+
+        //Sample room notification
+        it('should not return an error on valid request', function(done){
+            hipchatter.notify(settings.test_room, 
+                {
+                    message: "Test Message from Mocha", 
+                    token: settings.room_token
+                }, function(err, response){
+                    expect(err).to.be.null;
+                    done();
+                }
+            );
+        });
+
+        //Convenience
+        it('should still support the convenience syntax', function(done){
+            hipchatter.notify(settings.test_room, "Test Message from Mocha", settings.room_token, function(err, response){
+                expect(err).to.be.null;
+                done();
+            });
+        });
     });
 });

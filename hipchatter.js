@@ -29,18 +29,35 @@ Hipchatter.prototype = {
     },
 
     // Uses the simple "Room notification" token
-    notify: function(room, message, token, callback){
-        var data = {
-            color: 'green',
-            message: message
-        }
-        needle.post(this.url('room/'+room+'/message', token), data, {json:true}, function(error, res, body){
-            console.log(body)
-            if (!error && res.statusCode == 204) { callback(null, body); }
-            else callback(error, 'API connection error.');
-        });
-    },
+    // https://www.hipchat.com/docs/apiv2/method/send_room_notification
 
+    // notify: function(room, message, token, callback){
+    //     var data = {
+    //         color: 'green',
+    //         message: message
+    //     }
+    //     needle.post(this.url('room/'+room+'/message', token), data, {json:true}, function(error, res, body){
+    //         if (!error && res.statusCode == 204) { callback(null, body); }
+    //         else callback(error, 'API connection error.');
+    //     });
+    // },
+    notify: function(room, options, callback){
+
+        // convenience function notify(room, message, token, callback)
+        if (typeof arguments[1] == 'string') {
+            var message = arguments[1];
+            var token = arguments[2];
+            var callback = arguments[3];
+            this.request('room/'+room+'/notification', {message: message, token: token}, callback);
+        }
+        else if (typeof options != 'object' && typeof options == 'function') {
+            options(true, "Must supply an options object to the notify function containing at least the message and the room notification token. See https://www.hipchat.com/docs/apiv2/method/send_room_notification");
+        }
+        else if (!options.hasOwnProperty('message') || (!options.hasOwnProperty('token'))) {
+            callback(true, "Message and Room Notification token are required.");
+        }
+        else this.request('room/'+room+'/notification', options, callback);
+    },
     //TODO Endpoints
     // Capabilities
     //// Get capabilities
@@ -77,14 +94,14 @@ Hipchatter.prototype = {
     },
 
     // Make a request
-    request: function(path, callback){
-        needle.get(this.url(path), function (error, response, body) {
+    request: function(path, payload, callback){
+        var requestCallback = function (error, response, body) {
             
             // Connection error
             if (!!error) callback(true, 'HipChat API Error.');
 
             // HipChat returned an error or error status code
-            else if (body.hasOwnProperty('error') || response.statusCode != 200){
+            else if (body.hasOwnProperty('error') || (response.statusCode != 200 && response.statusCode != 204)){
                 try { callback(true, body.error.message); }
                 catch (e) {callback(true, body); }
             }
@@ -93,7 +110,22 @@ Hipchatter.prototype = {
             else {
                 callback(null, body);
             }
-        });
+        };
+
+        // If the function was only called with a path and a callback
+        if (typeof arguments[1] == 'function') {
+            callback = arguments[1];
+            needle.get(this.url(path), requestCallback);
+        }
+
+        // Else, if payload is an object of data, then submit POST request
+        else if (typeof payload == 'object') {
+            var url = (payload.hasOwnProperty('token'))? this.url(path, payload.token) : this.url(path);
+            needle.post(url, payload, {json: true}, requestCallback);
+        }
+
+        // Else something went wrong
+        else { callback(true, 'Invalid use of the hipchatter.request function.'); }
     }
     /** END HELPERS **/
 }
