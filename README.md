@@ -36,6 +36,11 @@ In your project's js file:
 Documentation
 -------------
 
+### Function Reference
+- [rooms](#rooms)
+- [history](#history)
+- [notify](#notify)
+
 ### [Rooms](https://www.hipchat.com/docs/apiv2/method/get_all_rooms)
 Returns all of the rooms you have access to.
 
