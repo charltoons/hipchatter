@@ -143,4 +143,11 @@ describe('Enpoints', function(){
             });
         });
     });
+
+    // Create Webhook
+    // describe('Create Webhook', function(){
+    //     before(function(done){
+    //         hipchatter.createWebhook()
+    //     });
+    // });
 });
