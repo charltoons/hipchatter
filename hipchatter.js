@@ -58,6 +58,15 @@ Hipchatter.prototype = {
         }
         else this.request('room/'+room+'/notification', options, callback);
     },
+    create_webhook: function(room, options, callback){
+        if (typeof options != 'object' && typeof options == 'function') {
+            options(true, "Must supply an options object to the notify function containing at least the message and the room notification token. See https://www.hipchat.com/docs/apiv2/method/send_room_notification");
+        }
+        else if (!options.hasOwnProperty('url') || (!options.hasOwnProperty('event'))) {
+            callback(true, "URL and Event are required.");
+        }
+        else this.request('room/'+room+'/webhook', options, callback);
+    },
     //TODO Endpoints
     // Capabilities
     //// Get capabilities

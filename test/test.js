@@ -145,9 +145,22 @@ describe('Enpoints', function(){
     });
 
     // Create Webhook
-    // describe('Create Webhook', function(){
-    //     before(function(done){
-    //         hipchatter.createWebhook()
-    //     });
-    // });
+    describe('Create Webhook', function(){
+        var err;
+        before(function(done){
+            var options = {
+                url: settings.webhook_url,
+                pattern: 'test',
+                event: 'room_message',
+                name: 'mocha test'
+            };
+            hipchatter.create_webhook(settings.test_room, options, function(_err, body){
+                err = _err;
+                done();
+            });
+        });
+        it('should not return an error', function(){
+            expect(err).to.be.null;
+        });
+    });
 });

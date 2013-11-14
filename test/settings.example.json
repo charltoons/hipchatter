@@ -1,5 +1,6 @@
 {
     "apikey": "<your api key>",
     "test_room": "Hipchatter",
-    "room_token":"<room notification token>"
+    "room_token":"<room notification token>",
+    "webhook_url":"http://google.com"
 }
