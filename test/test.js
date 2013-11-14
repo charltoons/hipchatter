@@ -146,7 +146,7 @@ describe('Enpoints', function(){
 
     // Create Webhook
     describe('Create Webhook', function(){
-        var err;
+        var err, link;
         before(function(done){
             var options = {
                 url: settings.webhook_url,
@@ -155,12 +155,16 @@ describe('Enpoints', function(){
                 name: 'mocha test'
             };
             hipchatter.create_webhook(settings.test_room, options, function(_err, body){
+                link = body.links.self;
                 err = _err;
                 done();
             });
         });
         it('should not return an error', function(){
             expect(err).to.be.null;
+        });
+        it('should return a link to the hook', function(){
+            expect(link).to.be.a('string');
         });
     });
 });
