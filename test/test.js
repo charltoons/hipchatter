@@ -143,6 +143,9 @@ describe('Enpoints', function(){
             });
         });
     });
+});
+
+describe.only('Webhooks', function(){
 
     // Create Webhook
     describe('Create Webhook', function(){
@@ -156,6 +159,7 @@ describe('Enpoints', function(){
             };
             hipchatter.create_webhook(settings.test_room, options, function(_err, body){
                 link = body.links.self;
+                // hipchatter.webhook_id = body.id;
                 err = _err;
                 done();
             });
@@ -165,6 +169,40 @@ describe('Enpoints', function(){
         });
         it('should return a link to the hook', function(){
             expect(link).to.be.a('string');
+        });
+    });
+
+    // Get a webhook -- Not supported yet
+    // describe('Get Webhook', function(){
+    //     var err, response;
+    //     before(function(done){
+
+    //         //uses the link created above
+    //         hipchatter.get_webhook(settings.test_room, hipchatter.webhook_id, function(e, r){
+    //             err = e;
+    //             response = r;
+    //             console.log(response);
+    //             done();
+    //         });
+    //     });
+    //     it('should not return an error', function(){
+    //         expect(err).to.be.null;
+    //     });
+    // });
+
+     // Get webhooks
+     describe('Get Webhooks', function(){
+        var err, response;
+        before(function(done){
+            hipchatter.webhooks(settings.test_room, function(e, r){
+                err = e;
+                response = r;
+                console.log(response);
+                done();
+            });
+        });
+        it('should not return an error', function(){
+            expect(err).to.be.null;
         });
     });
 });

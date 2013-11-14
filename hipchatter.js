@@ -9,6 +9,10 @@ var Hipchatter = function(token) {
     this.token = token;
 }
 
+// Turns logging on for debugging
+// var DEBUG = true;
+var DEBUG = false;
+
 //  Hipchatter functions
 Hipchatter.prototype = {
 
@@ -67,6 +71,12 @@ Hipchatter.prototype = {
         }
         else this.request('room/'+room+'/webhook', options, callback);
     },
+    // get_webhook: function(room, id, callback){
+    //     this.request('room/'+room+'/webhook/'+id, callback);
+    // },
+    webhooks: function(room, callback){
+        this.request('room/'+room+'/webhook', callback);
+    },
     //TODO Endpoints
     // Capabilities
     //// Get capabilities
@@ -99,7 +109,8 @@ Hipchatter.prototype = {
     // Generator API url
     url: function(rest_path, alternate_token){
         var token = (alternate_token == undefined)? this.token : alternate_token;
-        return API_ROOT + '/' + escape(rest_path) + '?auth_token=' + token;
+        if(DEBUG) console.log('URL REQUEST: ', (API_ROOT + '/' + escape(rest_path) + '?auth_token=' + token));
+        return API_ROOT + escape(rest_path) + '?auth_token=' + token;
     },
 
     // Make a request
