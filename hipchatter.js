@@ -100,8 +100,8 @@ Hipchatter.prototype = {
             // Connection error
             if (!!error) callback(true, 'HipChat API Error.');
 
-            // HipChat returned an error or error status code
-            else if (body.hasOwnProperty('error') || (response.statusCode != 200 && response.statusCode != 204)){
+            // HipChat returned an error or no HTTP Success status code
+            else if (body.hasOwnProperty('error') || (response.statusCode >=200 && response.statusCode < 300)){
                 try { callback(true, body.error.message); }
                 catch (e) {callback(true, body); }
             }
