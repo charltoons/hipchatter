@@ -159,7 +159,7 @@ describe.only('Webhooks', function(){
             };
             hipchatter.create_webhook(settings.test_room, options, function(_err, body){
                 link = body.links.self;
-                // hipchatter.webhook_id = body.id;
+                hipchatter.webhook_id = body.id;
                 err = _err;
                 done();
             });
@@ -190,19 +190,49 @@ describe.only('Webhooks', function(){
     //     });
     // });
 
-     // Get webhooks
-     describe('Get Webhooks', function(){
+    // Get webhooks
+    describe('Get Webhooks', function(){
         var err, response;
         before(function(done){
             hipchatter.webhooks(settings.test_room, function(e, r){
                 err = e;
                 response = r;
-                console.log(response);
                 done();
             });
         });
         it('should not return an error', function(){
             expect(err).to.be.null;
+        });
+        it('should have created a webhook about', function(){
+            expect(response.items.length).to.be.above(0);
+        })
+    });
+
+    // Delete webhook created earlier
+    describe('Delete Webhooks', function(){
+        var err, response;
+        before(function(_done){
+            var done = _done;
+            //Hipchat has to propagate the webhook creation before we can delete it
+            setTimeout(function(){
+                hipchatter.delete_webhook(settings.test_room, hipchatter.webhook_id, function(e, r){
+                    err = e;
+                    response = r;
+                    done();
+                });
+            }, 2000);
+        });
+        it('should not return an error', function(){
+            expect(err).to.be.null;
+        });
+        it('should have deleted the webhook', function(done){
+            setTimeout(function(){
+                hipchatter.webhooks(settings.test_room, function(e, r){
+                    expect(e).to.be.null;
+                    expect(r.items.length).to.equal(0);
+                    done();
+                });
+            }, 3000);
         });
     });
 });

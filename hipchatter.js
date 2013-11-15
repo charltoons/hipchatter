@@ -77,6 +77,23 @@ Hipchatter.prototype = {
     webhooks: function(room, callback){
         this.request('room/'+room+'/webhook', callback);
     },
+    delete_webhook: function(room, id, callback){
+        needle.delete(this.url('room/'+room+'/webhook/'+id), null, function (error, response, body) {
+            // Connection error
+            if (!!error) callback(true, 'HipChat API Error.');
+
+            // HipChat returned an error or no HTTP Success status code
+            else if (body.hasOwnProperty('error') || response.statusCode < 200 || response.statusCode >= 300){
+                try { callback(true, body.error.message); }
+                catch (e) {callback(true, body); }
+            }
+
+            // Everything worked
+            else {
+                callback(null, body);
+            }
+        });
+    },
     //TODO Endpoints
     // Capabilities
     //// Get capabilities
@@ -109,7 +126,7 @@ Hipchatter.prototype = {
     // Generator API url
     url: function(rest_path, alternate_token){
         var token = (alternate_token == undefined)? this.token : alternate_token;
-        if(DEBUG) console.log('URL REQUEST: ', (API_ROOT + '/' + escape(rest_path) + '?auth_token=' + token));
+        if(DEBUG) console.log('URL REQUEST: ', (API_ROOT + escape(rest_path) + '?auth_token=' + token));
         return API_ROOT + escape(rest_path) + '?auth_token=' + token;
     },
 
