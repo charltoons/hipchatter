@@ -145,7 +145,7 @@ describe('Enpoints', function(){
     });
 });
 
-describe.only('Webhooks', function(){
+describe('Webhooks', function(){
 
     // Create Webhook
     describe('Create Webhook', function(){
@@ -161,7 +161,11 @@ describe.only('Webhooks', function(){
                 link = body.links.self;
                 hipchatter.webhook_id = body.id;
                 err = _err;
-                done();
+
+                // generate 2 webhooks so delete_all_webhooks will have something to do
+                hipchatter.create_webhook(settings.test_room, options, function(_err, body){
+                    done();
+                });
             });
         });
         it('should not return an error', function(){
@@ -227,6 +231,31 @@ describe.only('Webhooks', function(){
             hipchatter.webhooks(settings.test_room, function(e, r){
                 expect(e).to.be.null;
                 expect(r.items.length).to.equal(previous_number_of_webhooks - 1);
+                done();
+            });
+        });
+    });
+
+    // Delete all webhooks for a room
+    describe('Delete all webhooks', function(){
+        var err, response, previous_number_of_webhooks;
+        before(function(done){
+            hipchatter.webhooks(settings.test_room, function(e, r){
+                previous_number_of_webhooks = r.items.length;
+                hipchatter.delete_all_webhooks(settings.test_room, function(e, r){
+                    err = e;
+                    response = r;
+                    done();
+                });
+            });
+        });
+        it('should not return an error', function(){
+            expect(err).to.be.null;
+        });
+        it('should have deleted all the webhooks', function(done){
+            hipchatter.webhooks(settings.test_room, function(e, r){
+                expect(e).to.be.null;
+                expect(r.items.length).to.equal(0);
                 done();
             });
         });

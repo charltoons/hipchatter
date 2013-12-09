@@ -3,6 +3,7 @@ var API_ROOT = 'https://api.hipchat.com/v2/';
 
 //  Dependencies
 var needle = require('needle');
+var async = require('async');
   
 //  Hipchatter constructor
 var Hipchatter = function(token) {  
@@ -92,6 +93,27 @@ Hipchatter.prototype = {
             else {
                 callback(null, body);
             }
+        });
+    },
+    delete_all_webhooks: function(room, callback){
+        var self = this;
+        this.webhooks(room, function(err, response){
+            if (err) return callback(true, response);
+            
+            var hooks = response.items;
+            var hookCalls = [];
+            for (var i=0; i<hooks.length; i++){
+                // wrapper function to preserve context of hookId
+                (function(hookId){
+                    hookCalls[i] = function(done){
+                        self.delete_webhook(room, hookId, done);
+                    }
+                })(hooks[i].id);
+            }
+            async.parallel(hookCalls, function(err, results){
+                if (err) return callback(true, results);
+                return callback(null, results);
+            });
         });
     },
     //TODO Endpoints
