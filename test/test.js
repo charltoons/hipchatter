@@ -173,22 +173,21 @@ describe.only('Webhooks', function(){
     });
 
     // Get a webhook -- Not supported yet
-    // describe('Get Webhook', function(){
-    //     var err, response;
-    //     before(function(done){
+    describe('Get Webhook', function(){
+        var err, response;
+        before(function(done){
 
-    //         //uses the link created above
-    //         hipchatter.get_webhook(settings.test_room, hipchatter.webhook_id, function(e, r){
-    //             err = e;
-    //             response = r;
-    //             console.log(response);
-    //             done();
-    //         });
-    //     });
-    //     it('should not return an error', function(){
-    //         expect(err).to.be.null;
-    //     });
-    // });
+            //uses the link created above
+            hipchatter.get_webhook(settings.test_room, hipchatter.webhook_id, function(e, r){
+                err = e;
+                response = r;
+                done();
+            });
+        });
+        it('should not return an error', function(){
+            expect(err).to.be.null;
+        });
+    });
 
     // Get webhooks
     describe('Get Webhooks', function(){
@@ -205,34 +204,31 @@ describe.only('Webhooks', function(){
         });
         it('should have created a webhook about', function(){
             expect(response.items.length).to.be.above(0);
-        })
+        });
     });
 
     // Delete webhook created earlier
-    describe('Delete Webhooks', function(){
-        var err, response;
-        before(function(_done){
-            var done = _done;
-            //Hipchat has to propagate the webhook creation before we can delete it
-            setTimeout(function(){
+    describe('Delete a Webhook', function(){
+        var err, response, previous_number_of_webhooks;
+        before(function(done){
+            hipchatter.webhooks(settings.test_room, function(e, r){
+                previous_number_of_webhooks = r.items.length;
                 hipchatter.delete_webhook(settings.test_room, hipchatter.webhook_id, function(e, r){
                     err = e;
                     response = r;
                     done();
                 });
-            }, 2000);
+            });
         });
         it('should not return an error', function(){
             expect(err).to.be.null;
         });
         it('should have deleted the webhook', function(done){
-            setTimeout(function(){
-                hipchatter.webhooks(settings.test_room, function(e, r){
-                    expect(e).to.be.null;
-                    expect(r.items.length).to.equal(0);
-                    done();
-                });
-            }, 3000);
+            hipchatter.webhooks(settings.test_room, function(e, r){
+                expect(e).to.be.null;
+                expect(r.items.length).to.equal(previous_number_of_webhooks - 1);
+                done();
+            });
         });
     });
 });

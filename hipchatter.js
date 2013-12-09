@@ -71,9 +71,9 @@ Hipchatter.prototype = {
         }
         else this.request('room/'+room+'/webhook', options, callback);
     },
-    // get_webhook: function(room, id, callback){
-    //     this.request('room/'+room+'/webhook/'+id, callback);
-    // },
+    get_webhook: function(room, id, callback){
+        this.request('room/'+room+'/webhook/'+id, callback);
+    },
     webhooks: function(room, callback){
         this.request('room/'+room+'/webhook', callback);
     },
