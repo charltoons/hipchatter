@@ -154,48 +154,27 @@ Remove a webhook.
 **Parameters:**
 
 - `room` (string) — the room name or id
-- `options` (object)
-    - **url** - for HipChat to ping
-    - **pattern** - regex to match message against
-    - **event** - the event to listen for.
-        - Valid values: `room_message`, `room_notification`, `room_exit`, `room_enter`, `room_topic_change`
-    - **name** - name for this webhook
+- `webhook_id` (string) - the id for the webhook that was returned from `create_webhook`
 
 **Results:** `err`, `err_response`
 
 #### Usage
 
-    hipchatter.create_webhook('Hipchatter Room', 
-        {
-            url: 'http://yourdomain.com',
-            event: 'room_message'
-        }, function(err){
-            if (err == null) console.log('Successfully created webhook.');
+    hipchatter.deleted_webhook('Hipchatter Room', '12345', function(err){
+            if (err == null) console.log('Webhook sucessfully deleted');
     });
 
 ### hipchatter.delete\_all_webhooks
-Create a webhook for HipChat to ping when a certain event happens in a room.
+A convenience function to delete all webhooks associated with a room.
 
-**Parameters:**
-
-- **room** (string) — the room name or id
-- **options** (object)
-    - **url** - for HipChat to ping
-    - **pattern** - regex to match message against
-    - **event** - the event to listen for.
-        - Valid values: `room_message`, `room_notification`, `room_exit`, `room_enter`, `room_topic_change`
-    - **name** - name for this webhook
+**Parameters:** `room` (string) — the room name or id
 
 **Results:** `err`, `err_response`
 
 #### Usage
 
-    hipchatter.create_webhook('Hipchatter Room', 
-        {
-            url: 'http://yourdomain.com',
-            event: 'room_message'
-        }, function(err){
-            if (err == null) console.log('Successfully created webhook.');
+    hipchatter.delete_all_webhooks('Hipchatter Room', function(err){
+        if (err == null) console.log('All webhooks sucessfully deleted');
     });
 
 
@@ -204,7 +183,5 @@ How to Test
 - Clone this repo
 - Copy `/test/settings.example.json` to `/test/settings.json`
 - Fill out your creds
-- Then:
-
-    `npm install
-    mocha -t 5000`
+- `npm install`
+- `mocha -t 5000`
