@@ -15,7 +15,7 @@ hipchatter.webhooks(settings.test_room, function(err, response){
     for (var i=0; i<webhooks.length; i++){
         var url = webhooks[i].links.self+'?auth_token='+settings.apikey;
         console.log(url);
-        needle.delete(url, function(e, r, b){
+        needle.delete(url, {}, function(e, r, b){
         });
     }
 });
