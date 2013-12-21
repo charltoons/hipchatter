@@ -16,8 +16,9 @@ Note: This is a work-in-progress, and will improve over time.
 How to Install
 --------------
 In your project folder:
-
+````bash
     npm install hipchatter --save
+````
     
 In your project's js file:
 ````javascript
