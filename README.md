@@ -33,9 +33,11 @@ In your project's js file:
 
 Usage
 ----
+````javascript
     hipchatter.<endpoint>( params, callback(err, response){
         console.log(response);
     });
+````
 
 - `<endpoint>` is the hipchatter function you are using.
 - `params` are the parameter requiree by the function
@@ -52,10 +54,11 @@ Returns all of the rooms you have access to.
 
 **Results:** `err`, array of rooms)
 #### Usage
-
+````javascript
     hipchatter.rooms(function(err, rooms){
         console.log(rooms);
     });
+````
 
 ### hipchatter.history
 The history of one room.
@@ -64,11 +67,12 @@ The history of one room.
 
 **Results:** `err`, history (object) — the history object, the messages are in history.items (array)
 #### Usage
-
+````javascript
     hipchatter.history('Hipchatter Room', function(err, history){
         // print the last message
         console.log(history.items[items.length-1].message);
     }
+````
 
 ### hipchatter.notify
 Send a room notification.
@@ -86,7 +90,7 @@ Send a room notification.
 **Results:** `err`, `err_response`
 
 #### Usage
-
+````javascript
     hipchatter.notify('Hipchatter Room', 
         {
             message: 'Hello World',
@@ -95,6 +99,7 @@ Send a room notification.
         }, function(err){
             if (err == null) console.log('Successfully notified the room.');
     });
+````
     
 ### hipchatter.create_webhook
 Create a webhook for HipChat to ping when a certain event happens in a room.
