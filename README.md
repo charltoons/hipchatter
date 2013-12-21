@@ -55,9 +55,9 @@ Returns all of the rooms you have access to.
 **Results:** `err`, array of rooms)
 #### Usage
 ````javascript
-    hipchatter.rooms(function(err, rooms){
-        console.log(rooms);
-    });
+hipchatter.rooms(function(err, rooms){
+    console.log(rooms);
+});
 ````
 
 ### hipchatter.history
@@ -68,10 +68,10 @@ The history of one room.
 **Results:** `err`, history (object) — the history object, the messages are in history.items (array)
 #### Usage
 ````javascript
-    hipchatter.history('Hipchatter Room', function(err, history){
-        // print the last message
-        console.log(history.items[items.length-1].message);
-    }
+hipchatter.history('Hipchatter Room', function(err, history){
+    // print the last message
+    console.log(history.items[items.length-1].message);
+}
 ````
 
 ### hipchatter.notify
@@ -91,14 +91,14 @@ Send a room notification.
 
 #### Usage
 ````javascript
-    hipchatter.notify('Hipchatter Room', 
-        {
-            message: 'Hello World',
-            color: 'green',
-            token: '<room notification token>'
-        }, function(err){
-            if (err == null) console.log('Successfully notified the room.');
-    });
+hipchatter.notify('Hipchatter Room', 
+    {
+        message: 'Hello World',
+        color: 'green',
+        token: '<room notification token>'
+    }, function(err){
+        if (err == null) console.log('Successfully notified the room.');
+});
 ````
     
 ### hipchatter.create_webhook
@@ -117,14 +117,15 @@ Create a webhook for HipChat to ping when a certain event happens in a room.
 **Results:** `err`, `err_response`
 
 #### Usage
-
-    hipchatter.create_webhook('Hipchatter Room', 
-        {
-            url: 'http://yourdomain.com',
-            event: 'room_message'
-        }, function(err){
-            if (err == null) console.log('Successfully created webhook.');
-    });
+````javascript
+hipchatter.create_webhook('Hipchatter Room', 
+    {
+        url: 'http://yourdomain.com',
+        event: 'room_message'
+    }, function(err){
+        if (err == null) console.log('Successfully created webhook.');
+});
+````
 
 ### hipchatter.get_webhook
 Get the details of a sepcific webhook.
@@ -137,10 +138,11 @@ Get the details of a sepcific webhook.
 **Results:** `err`, `webhook_info`
 
 #### Usage
-
-    hipchatter.get_webhook('Hipchatter Room', '12345', function(err, hook){
-            console.log(hook);
-    });
+````javascript
+hipchatter.get_webhook('Hipchatter Room', '12345', function(err, hook){
+        console.log(hook);
+});
+````
 
 ### hipchatter.webhooks
 Get all webhooks for a room.
@@ -150,11 +152,11 @@ Get all webhooks for a room.
 **Results:** `err`, `webhooks` (array)
 
 #### Usage
-
-    hipchatter.webhooks('Hipchatter Room', function(err, hooks){
-        console.log(hooks);
-    });
-
+````javascript
+hipchatter.webhooks('Hipchatter Room', function(err, hooks){
+    console.log(hooks);
+});
+````
 ### hipchatter.delete_webhook
 Remove a webhook.
 
@@ -166,10 +168,11 @@ Remove a webhook.
 **Results:** `err`, `err_response`
 
 #### Usage
-
-    hipchatter.deleted_webhook('Hipchatter Room', '12345', function(err){
-            if (err == null) console.log('Webhook sucessfully deleted');
-    });
+````javascript
+hipchatter.deleted_webhook('Hipchatter Room', '12345', function(err){
+        if (err == null) console.log('Webhook sucessfully deleted');
+});
+````
 
 ### hipchatter.delete\_all_webhooks
 A convenience function to delete all webhooks associated with a room.
@@ -179,11 +182,11 @@ A convenience function to delete all webhooks associated with a room.
 **Results:** `err`, `err_response`
 
 #### Usage
-
-    hipchatter.delete_all_webhooks('Hipchatter Room', function(err){
-        if (err == null) console.log('All webhooks sucessfully deleted');
-    });
-
+````javascript
+hipchatter.delete_all_webhooks('Hipchatter Room', function(err){
+    if (err == null) console.log('All webhooks sucessfully deleted');
+});
+````
 
 How to Test
 -----------
