@@ -13,11 +13,11 @@ hipchatter.rooms(function(err, rooms){
     console.log(rooms);
 });
 
-hipchatter.history('Projeqt Command Test', function(err, rooms){
+hipchatter.history('HipChatter', function(err, rooms){
     console.log(rooms);
 });
 
-hipchatter.notify('Projeqt Command Test', '<code>Charlton</code>', notify_key, function(err, result){
+hipchatter.notify('HipChatter', '<code>Such Notifications. Many HipChat. Wow.</code>', notify_key, function(err, result){
     if (err == undefined) console.log(err);
     else console.log(results);
 });
