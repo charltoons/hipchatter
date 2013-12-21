@@ -116,32 +116,10 @@ Hipchatter.prototype = {
             });
         });
     },
-    //TODO Endpoints
-    // Capabilities
-    //// Get capabilities
-    // Emoticons
-    //// Get all emoticons
-    //// Get emoticon
-    // OAuth
-    //// Generate Token
-    // Rooms
-    //// Create room
-    //// Send room notification
-    //// Get room
-    //// Delete room
-    //// Create webhook
-    //// Get all webhooks
-    //// Set topic
-    //// Delete webhook
-    //// Get webhook
-    //// Invite User
-    // Users
-    //// Private message user
-    //// Update user
-    //// Delete user
-    //// View User
-    //// Create user
-    //// Get all users
+    // Not Yet Implemented by HipChat
+    // set_topic: function(room, topic, callback){
+    //     this.request('room/'+room+'/topic', {topic: topic}, callback);
+    // },
 
     /** HELPERS **/
 
