@@ -20,7 +20,7 @@ In your project folder:
     npm install hipchatter --save
     
 In your project's js file:
-
+````javascript
     var Hipchatter = require('hipchatter');
     var hipchatter = new Hipchatter(your_auth_token);
     
@@ -28,6 +28,7 @@ In your project's js file:
     hipchatter.rooms(function(err, rooms){
         if(!err) console.log(rooms)
     });
+````
 
 Usage
 ----
