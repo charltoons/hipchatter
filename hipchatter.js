@@ -33,6 +33,13 @@ Hipchatter.prototype = {
         this.request('room/'+room+'/history', callback);
     },
 
+    emoticon: function(callback){
+        this.request('emoticon', function(err, results){
+            if (err) callback(err);
+            else callback(err, results.items);
+        });
+    },
+
     // Uses the simple "Room notification" token
     // https://www.hipchat.com/docs/apiv2/method/send_room_notification
 
