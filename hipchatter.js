@@ -12,7 +12,7 @@ var Hipchatter = function(token) {
 
 // Turns logging on for debugging
 // var DEBUG = true;
-var DEBUG = false;
+var DEBUG = true;
 
 //  Hipchatter functions
 Hipchatter.prototype = {
@@ -33,11 +33,57 @@ Hipchatter.prototype = {
         this.request('room/'+room+'/history', callback);
     },
 
-    emoticon: function(callback){
-        this.request('emoticon', function(err, results){
-            if (err) callback(err);
-            else callback(err, results.items);
-        });
+    // Get emoticon(s)
+    //
+    // https://www.hipchat.com/docs/apiv2/method/get_all_emoticons
+    // params: {
+    //     start-index: 0,
+    //     max-results: 100,
+    //     type: 'all'
+    // }
+    // 
+    // https://www.hipchat.com/docs/apiv2/method/get_emoticon
+    //
+    // params = 10;
+    // params = 'fonzie';
+    //
+    emoticons: function(params, callback){
+        if (arguments.length == 1) {
+            callback = params;
+            this.request('emoticon', function(err, results){
+                if (err) callback(err);
+                else callback(err, results.items);
+            });
+        }
+        if (arguments.length == 2) {
+            var arg = arguments[0];
+            if (typeof arg === 'number') {
+                // get emoticon by id
+                this.request('emoticon/' + arg, function(err, results){
+                    if (err) callback(err);
+                    else callback(err, results);
+                });
+            } else if (typeof arg === 'string') {
+                // get emoticon by shortcut
+                this.request('emoticon/' + arg, function(err, results){
+                    if (err) callback(err);
+                    else callback(err, results);
+                });
+            } else if (typeof arg === 'object') {
+                // get all emoticons based on specified params
+                console.log(arg);
+                var options = 
+                {
+                    'start-index': 'start_index' in arg ? arg['start_index'] : 0,
+                    'max-results': 'max_results?' in arg ? arg['max_results'] : 100,
+                    'type': 'type' in arg ? arg['type'] : 'all',
+                };
+                this.request('emoticon', options, function(err, results){
+                    if (err) console.log(err);
+                    console.log(results);
+                })
+            }
+        }
     },
 
     // Uses the simple "Room notification" token
