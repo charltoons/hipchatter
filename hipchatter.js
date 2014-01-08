@@ -57,20 +57,12 @@ Hipchatter.prototype = {
         }
         if (arguments.length == 2) {
             var arg = arguments[0];
-            if (typeof arg === 'number') {
-                // get emoticon by id
-                this.request('emoticon/' + arg, function(err, results){
-                    if (err) callback(err);
-                    else callback(err, results);
-                });
-            } else if (typeof arg === 'string') {
-                // get emoticon by shortcut
-                this.request('emoticon/' + arg, function(err, results){
-                    if (err) callback(err);
-                    else callback(err, results);
-                });
+            if (typeof arg === 'number' || typeof arg === 'string') {
+                // get emoticon by id or shortcut
+                return this.get_emoticon(arg, callback);
             } else if (typeof arg === 'object') {
                 // get all emoticons based on specified params
+                // still playing around with how to do this
                 console.log(arg);
                 var options = 
                 {
@@ -84,6 +76,13 @@ Hipchatter.prototype = {
                 })
             }
         }
+    },
+
+    get_emoticon: function(id, callback) {
+        this.request('emoticon/' + id, function(err, results){
+            if (err) callback(err);
+            else callback(err, results);
+        })
     },
 
     // Uses the simple "Room notification" token
