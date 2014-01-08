@@ -211,6 +211,7 @@ describe('Webhooks', function(){
         });
     });
 
+/*
     // Delete webhook created earlier
     describe('Delete a Webhook', function(){
         var err, response, previous_number_of_webhooks;
@@ -260,8 +261,9 @@ describe('Webhooks', function(){
             });
         });
     });
+    */
 });
-
+/*
 describe('Miscellaneous', function(){
     // Not working yet on HipChat's side
     // describe('Set Topic', function(){
@@ -275,3 +277,4 @@ describe('Miscellaneous', function(){
     //     });
     // });
 })
+*/
