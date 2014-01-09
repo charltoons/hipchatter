@@ -182,6 +182,18 @@ Hipchatter.prototype = {
         return API_ROOT + escape(rest_path) + '?auth_token=' + token;
     },
 
+    /** REQUESTS **/
+    // Make a GET request
+    get: function(path, payload, callback){
+
+    },
+
+    // Make POST request
+    post: function(path, payload, callback){
+
+    },
+
+    // TODO: refactor this function into get and post
     // Make a request
     request: function(path, payload, callback){
         var requestCallback = function (error, response, body) {
