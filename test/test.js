@@ -43,7 +43,7 @@ describe('Helpers', function(){
 });
 
 /** ENDPOINTS **/
-describe('Enpoints', function(){
+describe('Endpoints', function(){
 
     // Get all rooms
     describe('Get all rooms', function(){
