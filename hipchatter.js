@@ -176,10 +176,25 @@ Hipchatter.prototype = {
     /** HELPERS **/
 
     // Generator API url
-    url: function(rest_path, alternate_token){
-        var token = (alternate_token == undefined)? this.token : alternate_token;
-        if(DEBUG) console.log('URL REQUEST: ', (API_ROOT + escape(rest_path) + '?auth_token=' + token));
-        return API_ROOT + escape(rest_path) + '?auth_token=' + token;
+    url: function(rest_path, query, alternate_token){
+        if (arguments.length == 2) {
+            alternate_token = query;
+            var token = (alternate_token == undefined)? this.token : alternate_token;
+            if (DEBUG) console.log('URL REQUEST: ', (API_ROOT + escape(rest_path) + '?auth_token=' + token));
+            return API_ROOT + escape(rest_path) + '?auth_token=' + token;
+        } else if (arguments.length == 3) {
+            var query_string = '';
+            var token = (alternate_token == undefined)? this.token : alternate_token;
+            for (var key in query) {
+                query_string += ('&' + key + '=' + query[key]);
+            }
+            console.log(API_ROOT + escape(rest_path) + '?auth_token=' + token + query_string);
+            /*
+            var token = (alternate_token == undefined)? this.token : alternate_token;
+            if (DEBUG) console.log('URL REQUEST: ', (API_ROOT + escape(rest_path) + '?auth_token=' + token));
+            return API_ROOT + escape(rest_path) + '?auth_token=' + token;
+            */
+        }
     },
 
     /** REQUESTS **/
