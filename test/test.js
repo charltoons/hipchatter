@@ -40,6 +40,26 @@ describe('Helpers', function(){
             expect(alturl).to.contain('hipchat');
         });
     });
+    describe('url with query', function(){
+        var query = {'start-index': 10, 'max-results': 50, 'type': 'group'};
+        var url = hipchatter.url('emoticon', query);
+        it('should return a valid URL with query strings', function(){
+            expect(url).to.be.a('string');
+            expect(url).to.contain(settings.apikey);
+            expect(url).to.contain('hipchat');
+            expect(url).to.contain('&start-index=10');
+        });
+    });
+    describe('url with empty query', function(){
+        var query = {};
+        var url = hipchatter.url('emoticon', query);
+        it('should return a valid URL', function(){
+            expect(url).to.be.a('string');
+            expect(url).to.contain(settings.apikey);
+            expect(url).to.contain('hipchat');
+            expect(url).to.not.contain('&');
+        });
+    });
 });
 
 /** ENDPOINTS **/
@@ -102,6 +122,37 @@ describe('Endpoints', function(){
         });
     });
 
+    // Get emoticon(s)
+    describe('Emoticons', function(){
+        describe('Get all emoticons', function(){
+            // Set scope for the responses
+            var err, emoticons;
+
+            // Make the request
+            before(function(done){
+                hipchatter.emoticons(function(_err, _emoticons){
+                    err = _err;
+                    emoticons = _emoticons;
+                    done();
+                });
+            });
+            it('should not return an error', function(){
+                expect(err).to.be.null;
+            });
+            it('should return a list of emoticons', function(){
+                expect(emoticons).to.be.ok;
+                expect(emoticons).to.not.be.empty;
+            });
+            it('should return emoticons with required properties', function(){
+                expect(emoticons[0]).to.not.be.empty;
+                expect(emoticons[0]).to.have.property('id');
+                expect(emoticons[0]).to.have.property('url');
+                expect(emoticons[0]).to.have.property('links');
+                expect(emoticons[0]).to.have.property('shortcut');
+            });
+        });
+    });
+    /*
     // Send room notification
     describe('Room notification', function(){
 
@@ -143,8 +194,10 @@ describe('Endpoints', function(){
             });
         });
     });
+    */
 });
 
+/*
 describe('Webhooks', function(){
 
     // Create Webhook
@@ -211,7 +264,6 @@ describe('Webhooks', function(){
         });
     });
 
-/*
     // Delete webhook created earlier
     describe('Delete a Webhook', function(){
         var err, response, previous_number_of_webhooks;
@@ -261,8 +313,8 @@ describe('Webhooks', function(){
             });
         });
     });
-    */
 });
+*/
 /*
 describe('Miscellaneous', function(){
     // Not working yet on HipChat's side
