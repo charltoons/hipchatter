@@ -12,7 +12,7 @@ var Hipchatter = function(token) {
 
 // Turns logging on for debugging
 // var DEBUG = true;
-var DEBUG = true;
+var DEBUG = false;
 
 //  Hipchatter functions
 Hipchatter.prototype = {
@@ -63,7 +63,7 @@ Hipchatter.prototype = {
                 return this.get_emoticon(params, callback);
             } else if (typeof params === 'object') {
                 // get all emoticons based on specified params
-                // resort to default params if input param doesn't exist
+                // resort to default params if input param doesn't exist or is incorrectly typed
                 var query = {
                     'start-index': 'start-index' in params ? params['start-index'] : 0,
                     'max-results': 'max-results' in params ? params['max-results'] : 100,
@@ -106,7 +106,7 @@ Hipchatter.prototype = {
     notify: function(room, options, callback){
 
         // convenience function notify(room, message, token, callback)
-        if (typeof arguments[1] == 'string') {
+        if (typeof options == 'string') {
             var message = arguments[1];
             var token = arguments[2];
             var callback = arguments[3];
