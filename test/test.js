@@ -271,6 +271,7 @@ describe('Endpoints', function(){
             });
         });
     });
+
     // Send room notification
     describe('Room notification', function(){
 
@@ -313,7 +314,6 @@ describe('Endpoints', function(){
         });
     });
 });
-/*
 describe('Webhooks', function(){
 
     // Create Webhook
@@ -430,7 +430,6 @@ describe('Webhooks', function(){
         });
     });
 });
-*/
 describe('Miscellaneous', function(){
     // Not working yet on HipChat's side
     // describe('Set Topic', function(){
