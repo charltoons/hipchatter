@@ -20,7 +20,7 @@ Hipchatter.prototype = {
     // Get all rooms
     // https://www.hipchat.com/docs/apiv2/method/get_all_rooms
     rooms: function(callback){
-        this.request('room', function(err, results){
+        this.request('get', 'room', function(err, results){
             if (err) callback(err);
             else callback(err, results.items);
         });
@@ -30,7 +30,7 @@ Hipchatter.prototype = {
     // Takes either a room id or room name as a parameter
     // https://www.hipchat.com/docs/apiv2/method/view_history
     history: function(room, callback){
-        this.request('room/'+room+'/history', callback);
+        this.request('get', 'room/'+room+'/history', callback);
     },
 
     // Get emoticon(s)
@@ -50,12 +50,11 @@ Hipchatter.prototype = {
     emoticons: function(params, callback){
         if (arguments.length === 1) {
             callback = params;
-            this.request('emoticon', function(err, results){
+            this.request('get', 'emoticon', function(err, results){
                 if (err) callback(err);
                 else callback(err, results.items);
             });
-        }
-        if (arguments.length === 2) {
+        } else if (arguments.length === 2) {
             var arg = arguments[0];
             if (typeof arg === 'number' || typeof arg === 'string') {
                 // get emoticon by id or shortcut
@@ -63,23 +62,22 @@ Hipchatter.prototype = {
             } else if (typeof arg === 'object') {
                 // get all emoticons based on specified params
                 // still playing around with how to do this
-                console.log(arg);
                 var options = 
                 {
-                    'start-index': 'start_index' in arg ? arg['start_index'] : 0,
-                    'max-results': 'max_results?' in arg ? arg['max_results'] : 100,
+                    'start-index': 'start-index' in arg ? arg['start-index'] : 0,
+                    'max-results': 'max-results?' in arg ? arg['max-results'] : 100,
                     'type': 'type' in arg ? arg['type'] : 'all',
                 };
-                this.request('emoticon', options, function(err, results){
-                    if (err) console.log(err);
-                    console.log(results);
+                this.request('get', 'emoticon', options, function(err, results){
+                    if (err) callback(err);
+                    else callback(err, results.items);
                 });
             }
         }
     },
 
     get_emoticon: function(id, callback) {
-        this.request('emoticon/' + id, function(err, results){
+        this.request('get', 'emoticon/' + id, function(err, results){
             if (err) callback(err);
             else callback(err, results.items);
         });
@@ -105,7 +103,7 @@ Hipchatter.prototype = {
             var message = arguments[1];
             var token = arguments[2];
             var callback = arguments[3];
-            this.request('room/'+room+'/notification', {message: message, token: token}, callback);
+            this.request('post', 'room/'+room+'/notification', {message: message, token: token}, callback);
         }
         else if (typeof options != 'object' && typeof options == 'function') {
             options(true, "Must supply an options object to the notify function containing at least the message and the room notification token. See https://www.hipchat.com/docs/apiv2/method/send_room_notification");
@@ -113,7 +111,7 @@ Hipchatter.prototype = {
         else if (!options.hasOwnProperty('message') || (!options.hasOwnProperty('token'))) {
             callback(true, "Message and Room Notification token are required.");
         }
-        else this.request('room/'+room+'/notification', options, callback);
+        else this.request('post', 'room/'+room+'/notification', options, callback);
     },
     create_webhook: function(room, options, callback){
         if (typeof options != 'object' && typeof options == 'function') {
@@ -122,13 +120,13 @@ Hipchatter.prototype = {
         else if (!options.hasOwnProperty('url') || (!options.hasOwnProperty('event'))) {
             callback(true, "URL and Event are required.");
         }
-        else this.request('room/'+room+'/webhook', options, callback);
+        else this.request('post', 'room/'+room+'/webhook', options, callback);
     },
     get_webhook: function(room, id, callback){
-        this.request('room/'+room+'/webhook/'+id, callback);
+        this.request('get', 'room/'+room+'/webhook/'+id, callback);
     },
     webhooks: function(room, callback){
-        this.request('room/'+room+'/webhook', callback);
+        this.request('get', 'room/'+room+'/webhook', callback);
     },
     delete_webhook: function(room, id, callback){
         needle.delete(this.url('room/'+room+'/webhook/'+id), null, function (error, response, body) {
@@ -214,7 +212,11 @@ Hipchatter.prototype = {
 
     // TODO: refactor this function into get and post
     // Make a request
-    request: function(path, payload, callback){
+    // type: required
+    // path: required
+    // payload: optional
+    // callback: required
+    request: function(type, path, payload, callback){
         var requestCallback = function (error, response, body) {
             
             // Connection error
@@ -232,16 +234,22 @@ Hipchatter.prototype = {
             }
         };
 
-        // If the function was only called with a path and a callback
-        if (typeof arguments[1] == 'function') {
-            callback = arguments[1];
-            needle.get(this.url(path), requestCallback);
-        }
-
-        // Else, if payload is an object of data, then submit POST request
-        else if (typeof payload == 'object') {
-            var url = (payload.hasOwnProperty('token'))? this.url(path, payload.token) : this.url(path);
-            needle.post(url, payload, {json: true}, requestCallback);
+        if (type.toLowerCase() === 'get') {
+            if (arguments.length === 3) {
+                callback = payload;
+                needle.get(this.url(path), requestCallback);
+            } else if (arguments.length === 4) {
+                needle.get(this.url(path, payload), requestCallback);
+            }
+        } else if (type.toLowerCase() === 'post') {
+            if (arguments.length === 3) {
+                callback = payload;
+                needle.post(this.url(path), requestCallback);
+            } else if (arguments.length === 4) {
+                // Else, if payload is an object of data, then submit POST request
+                var url = (payload.hasOwnProperty('token'))? this.url(path, payload.token) : this.url(path);
+                needle.post(url, payload, {json: true}, requestCallback);
+            }
         }
 
         // Else something went wrong
