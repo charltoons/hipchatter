@@ -151,7 +151,7 @@ describe('Endpoints', function(){
                 expect(emoticons[0]).to.have.property('shortcut');
             });
         });
-        describe('Get all emoticons with query string', function(){
+        describe('Get all emoticons with valid query', function(){
             // Set scope for the responses
             var err, emoticons;
             var options = {'max-results': 15};
@@ -173,6 +173,40 @@ describe('Endpoints', function(){
             });
             it('should return a list of 15 emoticons', function(){
                 expect(emoticons).to.have.length(15);
+            });
+            it('should return emoticons with required properties', function(){
+                expect(emoticons[0]).to.not.be.empty;
+                expect(emoticons[0]).to.have.property('id');
+                expect(emoticons[0]).to.have.property('url');
+                expect(emoticons[0]).to.have.property('links');
+                expect(emoticons[0]).to.have.property('shortcut');
+            });
+        });
+        describe('Get all emoticons with invalid query', function(){
+            // Hipchatter.emoticons should ignore invalid params
+            // so this request should work without a problem
+
+            // Set scope for the responses
+            var err, emoticons;
+            var options = {
+                'puppets': 10, 
+                'isCat': true
+            };
+
+            // Make the request
+            before(function(done){
+                hipchatter.emoticons(options, function(_err, _emoticons){
+                    err = _err;
+                    emoticons = _emoticons;
+                    done();
+                });
+            });
+            it('should not return an error', function(){
+                expect(err).to.be.null;
+            });
+            it('should return a list of emoticons', function(){
+                expect(emoticons).to.be.ok;
+                expect(emoticons).to.not.be.empty;
             });
             it('should return emoticons with required properties', function(){
                 expect(emoticons[0]).to.not.be.empty;
@@ -237,7 +271,6 @@ describe('Endpoints', function(){
             });
         });
     });
-    /*
     // Send room notification
     describe('Room notification', function(){
 
@@ -279,9 +312,7 @@ describe('Endpoints', function(){
             });
         });
     });
-    */
 });
-
 /*
 describe('Webhooks', function(){
 
@@ -400,7 +431,6 @@ describe('Webhooks', function(){
     });
 });
 */
-/*
 describe('Miscellaneous', function(){
     // Not working yet on HipChat's side
     // describe('Set Topic', function(){
@@ -414,4 +444,3 @@ describe('Miscellaneous', function(){
     //     });
     // });
 })
-*/
