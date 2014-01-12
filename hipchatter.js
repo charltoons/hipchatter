@@ -55,18 +55,17 @@ Hipchatter.prototype = {
                 else callback(err, results.items);
             });
         } else if (arguments.length === 2) {
-            var arg = arguments[0];
-            if (typeof arg === 'number' || typeof arg === 'string') {
+            if (typeof params === 'number' || typeof params === 'string') {
                 // get emoticon by id or shortcut
-                return this.get_emoticon(arg, callback);
-            } else if (typeof arg === 'object') {
+                return this.get_emoticon(params, callback);
+            } else if (typeof params === 'object') {
                 // get all emoticons based on specified params
                 // still playing around with how to do this
                 var options = 
                 {
-                    'start-index': 'start-index' in arg ? arg['start-index'] : 0,
-                    'max-results': 'max-results?' in arg ? arg['max-results'] : 100,
-                    'type': 'type' in arg ? arg['type'] : 'all',
+                    'start-index': 'start-index' in params ? params['start-index'] : 0,
+                    'max-results': 'max-results' in params ? params['max-results'] : 100,
+                    'type': 'type' in params ? params['type'] : 'all',
                 };
                 this.request('get', 'emoticon', options, function(err, results){
                     if (err) callback(err);
@@ -79,7 +78,7 @@ Hipchatter.prototype = {
     get_emoticon: function(id, callback) {
         this.request('get', 'emoticon/' + id, function(err, results){
             if (err) callback(err);
-            else callback(err, results.items);
+            else callback(err, results);
         });
     },
 
