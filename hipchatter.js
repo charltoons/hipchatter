@@ -48,14 +48,14 @@ Hipchatter.prototype = {
     // params = 'fonzie';
     //
     emoticons: function(params, callback){
-        if (arguments.length == 1) {
+        if (arguments.length === 1) {
             callback = params;
             this.request('emoticon', function(err, results){
                 if (err) callback(err);
                 else callback(err, results.items);
             });
         }
-        if (arguments.length == 2) {
+        if (arguments.length === 2) {
             var arg = arguments[0];
             if (typeof arg === 'number' || typeof arg === 'string') {
                 // get emoticon by id or shortcut
@@ -73,7 +73,7 @@ Hipchatter.prototype = {
                 this.request('emoticon', options, function(err, results){
                     if (err) console.log(err);
                     console.log(results);
-                })
+                });
             }
         }
     },
@@ -81,8 +81,8 @@ Hipchatter.prototype = {
     get_emoticon: function(id, callback) {
         this.request('emoticon/' + id, function(err, results){
             if (err) callback(err);
-            else callback(err, results);
-        })
+            else callback(err, results.items);
+        });
     },
 
     // Uses the simple "Room notification" token
@@ -177,35 +177,39 @@ Hipchatter.prototype = {
 
     // Generator API url
     url: function(rest_path, query, alternate_token){
-        if (arguments.length == 2) {
-            alternate_token = query;
-            var token = (alternate_token == undefined)? this.token : alternate_token;
-            if (DEBUG) console.log('URL REQUEST: ', (API_ROOT + escape(rest_path) + '?auth_token=' + token));
-            return API_ROOT + escape(rest_path) + '?auth_token=' + token;
-        } else if (arguments.length == 3) {
+        var BASE_URL = API_ROOT + escape(rest_path) + '?auth_token=';
+        var queryString = function(query) {
             var query_string = '';
-            var token = (alternate_token == undefined)? this.token : alternate_token;
             for (var key in query) {
                 query_string += ('&' + key + '=' + query[key]);
             }
-            console.log(API_ROOT + escape(rest_path) + '?auth_token=' + token + query_string);
-            /*
-            var token = (alternate_token == undefined)? this.token : alternate_token;
-            if (DEBUG) console.log('URL REQUEST: ', (API_ROOT + escape(rest_path) + '?auth_token=' + token));
-            return API_ROOT + escape(rest_path) + '?auth_token=' + token;
-            */
+            return query_string;
+        };
+        if (arguments.length === 1) {
+            var url = BASE_URL + this.token;
+            if (DEBUG) console.log('URL REQUEST: ', url);
+            return url;
         }
-    },
-
-    /** REQUESTS **/
-    // Make a GET request
-    get: function(path, payload, callback){
-
-    },
-
-    // Make POST request
-    post: function(path, payload, callback){
-
+        if (arguments.length === 2) {
+            if (typeof query === 'object') {
+                // do object stuff
+                var url = BASE_URL + this.token + queryString(query);
+                if (DEBUG) console.log('URL REQUEST: ', url);
+                return url;
+            } else {
+                // do string stuff
+                alternate_token = query;
+                var token = (alternate_token == undefined) ? this.token : alternate_token;
+                var url = BASE_URL + token;
+                if (DEBUG) console.log('URL REQUEST: ', url);
+                return url;
+            }
+        } else if (arguments.length === 3) {
+            var token = (alternate_token == undefined)? this.token : alternate_token;
+            var url = BASE_URL + token + queryString(query);
+            if (DEBUG) console.log('URL REQUEST: ', url);
+            return url;
+        }
     },
 
     // TODO: refactor this function into get and post
