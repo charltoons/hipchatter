@@ -13,12 +13,16 @@ hipchatter.rooms(function(err, rooms){
     console.log(rooms);
 });
 
-hipchatter.history('HipChatter', function(err, rooms){
-    console.log(rooms);
+// hipchatter.history('HipChatter', function(err, rooms){
+//     console.log(rooms);
+// });
+
+hipchatter.emoticons({}, function(err, emoticons){
+    console.log(emoticons);
 });
 
-hipchatter.notify('HipChatter', '<code>Such Notifications. Many HipChat. Wow.</code>', notify_key, function(err, result){
-    if (err == undefined) console.log(err);
-    else console.log(results);
-});
+// hipchatter.notify('HipChatter', '<code>Such Notifications. Many HipChat. Wow.</code>', notify_key, function(err, result){
+//     if (err == undefined) console.log(err);
+//     else console.log(results);
+// });
 
