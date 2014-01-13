@@ -2,9 +2,9 @@
   "name": "hipchatter",
   "description": "Wrapper for the HipChat API (v2)",
   "version": "0.1.0",
-  "author": "Charlton Roberts",
+  "author": "Charlton Roberts <charltonroberts@gmail.com (http://charlton.io)",
   "contributors": [
-    "Macklin Underdown <macklinu@gmail.com> (http://mackli.nu)",
+    "Macklin Underdown <macklinu@gmail.com> (http://mackli.nu)"
   ],
   "keywords": [
     "hipchat",
