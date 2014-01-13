@@ -20,7 +20,7 @@ Hipchatter.prototype = {
     // Get all rooms
     // https://www.hipchat.com/docs/apiv2/method/get_all_rooms
     rooms: function(callback){
-        this.request('room', function(err, results){
+        this.request('get', 'room', function(err, results){
             if (err) callback(err);
             else callback(err, results.items);
         });
@@ -30,7 +30,64 @@ Hipchatter.prototype = {
     // Takes either a room id or room name as a parameter
     // https://www.hipchat.com/docs/apiv2/method/view_history
     history: function(room, callback){
-        this.request('room/'+room+'/history', callback);
+        this.request('get', 'room/'+room+'/history', callback);
+    },
+
+    // Get emoticons
+    //
+    // https://www.hipchat.com/docs/apiv2/method/get_all_emoticons
+    // params: {
+    //     'start-index': 0,
+    //     'max-results': 100,
+    //     'type': 'all'
+    // }
+    //
+    // or
+    // 
+    // Get emoticon by shortcut or id
+    // https://www.hipchat.com/docs/apiv2/method/get_emoticon
+    //
+    // params = 34;
+    // params = 'fonzie';
+    //
+    emoticons: function(params, callback){
+        if (arguments.length === 1) { // only supplied a callback function
+            callback = params;
+            this.request('get', 'emoticon', function(err, results){
+                if (err) callback(err);
+                else callback(err, results.items);
+            });
+        } else if (arguments.length === 2) { // contains some type of param
+            if (typeof params === 'number' || typeof params === 'string') {
+                // get emoticon by id or shortcut
+                return this.get_emoticon(params, callback);
+            } else if (typeof params === 'object') {
+                // get all emoticons based on specified params
+                // resort to default params if input param doesn't exist or is incorrectly typed
+                var query = {
+                    'start-index': 'start-index' in params ? params['start-index'] : 0,
+                    'max-results': 'max-results' in params ? params['max-results'] : 100,
+                    'type': 'type' in params ? params['type'] : 'all',
+                };
+                this.request('get', 'emoticon', query, function(err, results){
+                    if (err) callback(err);
+                    else callback(err, results.items);
+                });
+            }
+        }
+    },
+
+    // Get emoticon by id or shortcut
+    // https://www.hipchat.com/docs/apiv2/method/get_emoticon
+    //
+    // param = 34; // id
+    // param = 'fonzie'; // shortcut
+    //
+    get_emoticon: function(param, callback) {
+        this.request('get', 'emoticon/' + param, function(err, results){
+            if (err) callback(err);
+            else callback(err, results);
+        });
     },
 
     // Uses the simple "Room notification" token
@@ -49,11 +106,11 @@ Hipchatter.prototype = {
     notify: function(room, options, callback){
 
         // convenience function notify(room, message, token, callback)
-        if (typeof arguments[1] == 'string') {
+        if (typeof options == 'string') {
             var message = arguments[1];
             var token = arguments[2];
             var callback = arguments[3];
-            this.request('room/'+room+'/notification', {message: message, token: token}, callback);
+            this.request('post', 'room/'+room+'/notification', {message: message, token: token}, callback);
         }
         else if (typeof options != 'object' && typeof options == 'function') {
             options(true, "Must supply an options object to the notify function containing at least the message and the room notification token. See https://www.hipchat.com/docs/apiv2/method/send_room_notification");
@@ -61,7 +118,7 @@ Hipchatter.prototype = {
         else if (!options.hasOwnProperty('message') || (!options.hasOwnProperty('token'))) {
             callback(true, "Message and Room Notification token are required.");
         }
-        else this.request('room/'+room+'/notification', options, callback);
+        else this.request('post', 'room/'+room+'/notification', options, callback);
     },
     create_webhook: function(room, options, callback){
         if (typeof options != 'object' && typeof options == 'function') {
@@ -70,13 +127,13 @@ Hipchatter.prototype = {
         else if (!options.hasOwnProperty('url') || (!options.hasOwnProperty('event'))) {
             callback(true, "URL and Event are required.");
         }
-        else this.request('room/'+room+'/webhook', options, callback);
+        else this.request('post', 'room/'+room+'/webhook', options, callback);
     },
     get_webhook: function(room, id, callback){
-        this.request('room/'+room+'/webhook/'+id, callback);
+        this.request('get', 'room/'+room+'/webhook/'+id, callback);
     },
     webhooks: function(room, callback){
-        this.request('room/'+room+'/webhook', callback);
+        this.request('get', 'room/'+room+'/webhook', callback);
     },
     delete_webhook: function(room, id, callback){
         needle.delete(this.url('room/'+room+'/webhook/'+id), null, function (error, response, body) {
@@ -124,14 +181,47 @@ Hipchatter.prototype = {
     /** HELPERS **/
 
     // Generator API url
-    url: function(rest_path, alternate_token){
-        var token = (alternate_token == undefined)? this.token : alternate_token;
-        if(DEBUG) console.log('URL REQUEST: ', (API_ROOT + escape(rest_path) + '?auth_token=' + token));
-        return API_ROOT + escape(rest_path) + '?auth_token=' + token;
+    url: function(rest_path, query, alternate_token){
+        // inner helpers
+        var BASE_URL = API_ROOT + escape(rest_path) + '?auth_token=';
+        var queryString = function(query) {
+            var query_string = '';
+            for (var key in query) {
+                query_string += ('&' + key + '=' + query[key]);
+            }
+            return query_string;
+        };
+
+        if (arguments.length === 1) { // only contains path
+            var url = BASE_URL + this.token;
+            if (DEBUG) console.log('URL REQUEST: ', url);
+            return url;
+        } else if (arguments.length === 2) { // contains query or alt token
+            if (typeof query === 'object') { // query {}
+                var url = BASE_URL + this.token + queryString(query);
+                if (DEBUG) console.log('URL REQUEST: ', url);
+                return url;
+            } else { // alt token
+                alternate_token = query;
+                var token = (alternate_token == undefined) ? this.token : alternate_token;
+                var url = BASE_URL + token;
+                if (DEBUG) console.log('URL REQUEST: ', url);
+                return url;
+            }
+        } else if (arguments.length === 3) {
+            var token = (alternate_token == undefined)? this.token : alternate_token;
+            var url = BASE_URL + token + queryString(query);
+            if (DEBUG) console.log('URL REQUEST: ', url);
+            return url;
+        }
     },
 
     // Make a request
-    request: function(path, payload, callback){
+    // type: required - type of REST request ('get' or 'post' currently)
+    // path: required - 
+    // payload: optional - query string data for 'get', '' 
+    // callback: required - 
+    request: function(type, path, payload, callback){
         var requestCallback = function (error, response, body) {
             
             // Connection error
@@ -149,20 +239,24 @@ Hipchatter.prototype = {
             }
         };
 
-        // If the function was only called with a path and a callback
-        if (typeof arguments[1] == 'function') {
-            callback = arguments[1];
-            needle.get(this.url(path), requestCallback);
+        if (type.toLowerCase() === 'get') { // GET request
+            if (arguments.length === 3) { // without payload
+                callback = payload;
+                needle.get(this.url(path), requestCallback);
+            } else if (arguments.length === 4) { // with payload
+                needle.get(this.url(path, payload), requestCallback);
+            }
+        } else if (type.toLowerCase() === 'post') { // POST request
+            if (arguments.length === 3) { // without payload
+                callback = payload;
+                needle.post(this.url(path), requestCallback);
+            } else if (arguments.length === 4) { // with payload
+                var url = (payload.hasOwnProperty('token'))? this.url(path, payload.token) : this.url(path);
+                needle.post(url, payload, {json: true}, requestCallback);
+            }
+        } else { // otherwise, something went wrong
+            callback(true, 'Invalid use of the hipchatter.request function.'); 
         }
-
-        // Else, if payload is an object of data, then submit POST request
-        else if (typeof payload == 'object') {
-            var url = (payload.hasOwnProperty('token'))? this.url(path, payload.token) : this.url(path);
-            needle.post(url, payload, {json: true}, requestCallback);
-        }
-
-        // Else something went wrong
-        else { callback(true, 'Invalid use of the hipchatter.request function.'); }
     }
     /** END HELPERS **/
 }

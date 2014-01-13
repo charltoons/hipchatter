@@ -34,13 +34,13 @@ In your project's js file:
 Usage
 ----
 ````javascript
-    hipchatter.<endpoint>( params, callback(err, response){
+    hipchatter.<endpoint>(params, callback(err, response){
         console.log(response);
     });
 ````
 
 - `<endpoint>` is the hipchatter function you are using.
-- `params` are the parameter requiree by the function
+- `params` are the parameter required by the function
 - `err` will be true if there's an error, null if there's not
 - `response` the direct response from the HipChat API (JSON)
 
@@ -71,6 +71,63 @@ The history of one room.
 hipchatter.history('Hipchatter Room', function(err, history){
     // print the last message
     console.log(history.items[items.length-1].message);
+});
+````
+
+### hipchatter.emoticons
+Returns up to 100 emoticons.
+> [HipChat API reference](https://www.hipchat.com/docs/apiv2/method/get_all_emoticons)
+
+**Parameters:** 
+
+- `param` (object) - Optional. query string parameters (optional)
+    - `'start-index': <int>` - Optional. The start index for the result set. Defaults to `0`.
+    - `'max-results': <int>` - Optional. The maximum number of results. Defaults to `100`.
+    - `'type': <string>` - Optional. The type of emoticons to get. Defaults to `'all'`.
+- `param` (int) - Optional. id for single emoticon.
+- `param` (string) - Optional. shortcut for single emoticon.
+
+**Results:** `err`, response (array: list of emoticons) (object: single emoticon)
+#### Usage
+````javascript
+// default: returns array of all emoticons
+hipchatter.emoticons(function(err, emoticons){
+    console.log(emoticons);
+});
+
+hipchatter.emoticons({'start-index': 20, 'max-results': 40, 'type': 'group'}, function(err, emoticons){
+   console.log(emoticons); 
+});
+
+hipchatter.emoticons(34, function(err, emoticon){
+    console.log(emoticon);
+});
+
+hipchatter.emoticons('fonzie', function(err, emoticon){
+    console.log(emoticon);
+});
+````
+
+### hipchatter.get_emoticon
+Get an emoticon by id or shortcut.
+> [HipChat API reference](https://www.hipchat.com/docs/apiv2/method/get_emoticon)
+
+**Parameters:**
+
+- `param` (int) - Required. id for single emoticon.
+or
+- `param` (string) - Required. shortcut for single emoticon.
+
+**Results:** `err`, response (object) - single emoticon details
+#### Usage
+````javascript
+hipchatter.get_emoticon(34, function(err, emoticon){
+    console.log(emoticon);
+});
+
+hipchatter.get_emoticon('fonzie', function(err, emoticon){
+    console.log(emoticon);
+});
 }
 ````
 
@@ -128,7 +185,7 @@ hipchatter.create_webhook('Hipchatter Room',
 ````
 
 ### hipchatter.get_webhook
-Get the details of a sepcific webhook.
+Get the details of a specific webhook.
 
 **Parameters:**
 
