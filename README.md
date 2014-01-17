@@ -251,4 +251,4 @@ How to Test
 - Copy `/test/settings.example.json` to `/test/settings.json`
 - Fill out your creds
 - `npm install`
-- `mocha -t 5000`
+- `npm test`
