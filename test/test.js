@@ -464,7 +464,10 @@ describe('Miscellaneous', function(){
         it('should set the topic in the room', function(done){
             hipchatter.set_topic(settings.test_room, 'Test Topic', function(e, r){
                 expect(e).to.be.null;
-                done();
+                hipchatter.get_room(settings.test_room, function(err, response){
+                    expect(response.topic).to.equal('Test Topic');
+                    done();
+                });
             });
         });
     });
