@@ -92,6 +92,33 @@ describe('Endpoints', function(){
         });
     });
 
+    // Get one room
+    describe('Get room', function(){
+        
+        // Set scope for the responses
+        var err, room;
+
+        // Make the request
+        before(function(done){
+            hipchatter.get_room(settings.test_room, function(_err, _room){
+                err = _err;
+                room = _room;
+                done();
+            });
+        });
+        it('should not return an error', function(){
+            expect(err).to.be.null;
+        });
+        it('should return the details of the room', function(){
+            expect(room).to.be.ok;
+            expect(room).to.not.be.empty;
+        });
+        it('should return a room name and topic, at least', function(){
+            expect(room).to.have.property('name');
+            expect(room).to.have.property('topic');
+        });
+    });
+
     // Get the history of a room
     describe('View history', function(){
         // Set scope for the responses
@@ -432,8 +459,7 @@ describe('Webhooks', function(){
     });
 });
 
-describe.only('Miscellaneous', function(){
-    // Not working yet on HipChat's side
+describe('Miscellaneous', function(){
     describe('Set Topic', function(){
         it('should set the topic in the room', function(done){
             hipchatter.set_topic(settings.test_room, 'Test Topic', function(e, r){

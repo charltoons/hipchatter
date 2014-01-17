@@ -52,11 +52,28 @@ Returns all of the rooms you have access to.
 
 **Parameters:** None 
 
-**Results:** `err`, array of rooms)
+**Results:** `err`, array of rooms
 #### Usage
 ````javascript
 hipchatter.rooms(function(err, rooms){
     console.log(rooms);
+});
+````
+
+### hipchatter.get_room
+Returns the details of a single room.
+
+**Parameters:** `room` (string) - the room name or id
+
+**Results:** 
+
+- `err`, array of rooms
+- `room_details`, an object of the rooms details
+
+#### Usage
+````javascript
+hipchatter.get_room(function(err, room){
+    console.log(room);
 });
 ````
 

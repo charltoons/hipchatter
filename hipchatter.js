@@ -26,6 +26,15 @@ Hipchatter.prototype = {
         });
     },
 
+    // Get room
+    // https://www.hipchat.com/docs/apiv2/method/get_room
+    get_room: function(room, callback){
+        this.request('get', 'room/'+room, function(err, result){
+            if (err) callback(err);
+            else callback(err, result);
+        });
+    },
+
     // Get history from room
     // Takes either a room id or room name as a parameter
     // https://www.hipchat.com/docs/apiv2/method/view_history
@@ -173,7 +182,6 @@ Hipchatter.prototype = {
             });
         });
     },
-    // Not Yet Implemented by HipChat
     set_topic: function(room, topic, callback){
         this.request('put', 'room/'+room+'/topic', {topic: topic}, callback);
     },
@@ -224,7 +232,7 @@ Hipchatter.prototype = {
     request: function(type, path, payload, callback){
         var requestCallback = function (error, response, body) {
             if (DEBUG) {console.log('RESPONSE: ', error, response, body);}
-            
+
             // Connection error
             if (!!error) callback(true, 'HipChat API Error.');
 
