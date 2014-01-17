@@ -175,7 +175,7 @@ Hipchatter.prototype = {
     },
     // Not Yet Implemented by HipChat
     set_topic: function(room, topic, callback){
-        this.request('get', 'room/'+room+'/topic', {topic: topic}, callback);
+        this.request('put', 'room/'+room+'/topic', {topic: topic}, callback);
     },
 
     /** HELPERS **/
@@ -223,6 +223,7 @@ Hipchatter.prototype = {
     // callback: required - 
     request: function(type, path, payload, callback){
         var requestCallback = function (error, response, body) {
+            if (DEBUG) {console.log('RESPONSE: ', error, response, body);}
             
             // Connection error
             if (!!error) callback(true, 'HipChat API Error.');
@@ -239,14 +240,17 @@ Hipchatter.prototype = {
             }
         };
 
-        if (type.toLowerCase() === 'get') { // GET request
+        // GET request
+        if (type.toLowerCase() === 'get') {
             if (arguments.length === 3) { // without payload
                 callback = payload;
                 needle.get(this.url(path), requestCallback);
             } else if (arguments.length === 4) { // with payload
                 needle.get(this.url(path, payload), requestCallback);
             }
-        } else if (type.toLowerCase() === 'post') { // POST request
+
+        // POST request
+        } else if (type.toLowerCase() === 'post') {
             if (arguments.length === 3) { // without payload
                 callback = payload;
                 needle.post(this.url(path), requestCallback);
@@ -254,7 +258,13 @@ Hipchatter.prototype = {
                 var url = (payload.hasOwnProperty('token'))? this.url(path, payload.token) : this.url(path);
                 needle.post(url, payload, {json: true}, requestCallback);
             }
-        } else { // otherwise, something went wrong
+
+        // PUT request 
+        } else if (type.toLowerCase() === 'put') {
+            needle.put(this.url(path), payload, {json: true}, requestCallback);
+
+        // otherwise, something went wrong   
+        } else { 
             callback(true, 'Invalid use of the hipchatter.request function.'); 
         }
     }

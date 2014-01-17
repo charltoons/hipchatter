@@ -432,16 +432,14 @@ describe('Webhooks', function(){
     });
 });
 
-describe('Miscellaneous', function(){
+describe.only('Miscellaneous', function(){
     // Not working yet on HipChat's side
-    // describe('Set Topic', function(){
-    //     it('should set the topic in the room', function(done){
-    //         hipchatter.set_topic(settings.test_room, 'Test Topic', function(e, r){
-    //             console.log(e, r)
-    //             expect(e).to.be.null;
-    //             console.log(r);
-    //             done();
-    //         });
-    //     });
-    // });
+    describe('Set Topic', function(){
+        it('should set the topic in the room', function(done){
+            hipchatter.set_topic(settings.test_room, 'Test Topic', function(e, r){
+                expect(e).to.be.null;
+                done();
+            });
+        });
+    });
 })
