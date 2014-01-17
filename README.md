@@ -245,6 +245,23 @@ hipchatter.delete_all_webhooks('Hipchatter Room', function(err){
 });
 ````
 
+### hipchatter.set_topic
+Set the topic of a room.
+
+**Parameters:** 
+
+- `room` (string) — Required. The room name or id.
+- `topic` (string) - Required. The topic that this room will be set to.
+
+**Results:** `err`, `err_response`
+
+#### Usage
+````javascript
+hipchatter.set_topic('Hipchatter Room', 'We Are All Talking About This', function(err){
+    if (err == null) console.log('New Topic Set');
+});
+````
+
 How to Test
 -----------
 - Clone this repo
