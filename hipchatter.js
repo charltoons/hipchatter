@@ -174,9 +174,9 @@ Hipchatter.prototype = {
         });
     },
     // Not Yet Implemented by HipChat
-    // set_topic: function(room, topic, callback){
-    //     this.request('room/'+room+'/topic', {topic: topic}, callback);
-    // },
+    set_topic: function(room, topic, callback){
+        this.request('get', 'room/'+room+'/topic', {topic: topic}, callback);
+    },
 
     /** HELPERS **/
 
