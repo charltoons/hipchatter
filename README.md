@@ -313,6 +313,7 @@ TODO
 - Misc
     - Error events for things like rate limits
     - Addon helpers
+    - Add support for `expand` (https://www.hipchat.com/docs/apiv2/expansion)
 
 How to Test
 -----------
