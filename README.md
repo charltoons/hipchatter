@@ -279,6 +279,41 @@ hipchatter.set_topic('Hipchatter Room', 'We Are All Talking About This', functio
 });
 ````
 
+TODO
+----
+- Capabilities
+- Emoticons
+    - ~~Get all emoticons~~
+    - ~~Get emoticon~~
+- OAuth Sessions
+- Rooms
+    - Create room
+    - ~~Get all rooms~~
+    - ~~Send room notification~~
+    - Update room
+    - ~~Get room~~
+    - Delete room
+    - ~~Create webhook~~
+    - ~~Get all webhooks~~
+    - Get all members
+    - ~~Set topic~~
+    - Add member
+    - Remove member
+    - ~~Delete webhook~~
+    - ~~Get webhook~~
+    - ~~View History~~
+    - Invite user
+- Users
+    - Private message user
+    - Update user
+    - Delete user
+    - View user
+    - Create user
+    - Get all users
+- Misc
+    - Error events for things like rate limits
+    - Addon helpers
+
 How to Test
 -----------
 - Clone this repo
