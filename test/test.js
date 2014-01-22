@@ -65,6 +65,28 @@ describe('Helpers', function(){
 /** ENDPOINTS **/
 describe('Endpoints', function(){
 
+    // Create a new room
+    describe('Create room', function(){
+        
+        // Set scope for the responses
+        var err, room;
+
+        // Make the request
+        before(function(done){
+            hipchatter.create_room({name: 'Test Room'}, function(_err, _room){
+                err = _err;
+                room = _room;
+                done();
+            });
+        });
+        it('should not return an error', function(){
+            expect(err).to.be.null;
+        });
+        it('should return a room id', function(){
+            expect(room.id).to.be.a.number;
+        });
+    });
+
     // Get all rooms
     describe('Get all rooms', function(){
         

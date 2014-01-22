@@ -70,9 +70,26 @@ Returns the details of a single room.
 - `err`, array of rooms
 - `room_details`, an object of the rooms details
 
+### hipchatter.create_room
+Creates a new room.
+
+**Parameters:** 
+
+- `params` (object) - Required. Options for the new room.
+    - `'guest_access': <bool>` - Optional. Whether or not to enable guest access for this room. Defaults to false.
+    - `'name': <string>` - Required. Name of the room
+    - `'owner_user_id': <string>` - User ID or email address of the room's owner.
+    - `'privacy': <string>` - Whether the room is available for access by other users or not. (`public` or `private`)
+
+
+**Results:** 
+
+- `err`, array of rooms
+- `room_details`, an object of the rooms details
+
 #### Usage
 ````javascript
-hipchatter.get_room(function(err, room){
+hipchatter.create_room({name: 'Such Room', function(err, room){
     console.log(room);
 });
 ````
