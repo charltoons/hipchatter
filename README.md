@@ -89,8 +89,27 @@ Creates a new room.
 
 #### Usage
 ````javascript
-hipchatter.create_room({name: 'Such Room', function(err, room){
+hipchatter.create_room({name: 'Such Room'}, function(err, room){
     console.log(room);
+});
+````
+
+### hipchatter.delete_room
+Delete a room.
+
+**Parameters:** 
+
+- `room_name` (string) - Required. The name of the new room.
+
+
+**Results:** 
+
+- `err`
+
+#### Usage
+````javascript
+hipchatter.delete_room('Such Room', function(err){
+    if(!err) console.log('"Such Room" successfully deleted.');
 });
 ````
 

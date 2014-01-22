@@ -26,6 +26,12 @@ Hipchatter.prototype = {
         });
     },
 
+    // Delete a room
+    // https://www.hipchat.com/docs/apiv2/method/delete_room
+    delete_room: function(room, callback){
+        this.request('delete', 'room/'+room, callback);
+    },
+
     // Get all rooms
     // https://www.hipchat.com/docs/apiv2/method/get_all_rooms
     rooms: function(callback){
@@ -279,6 +285,11 @@ Hipchatter.prototype = {
         // PUT request 
         } else if (type.toLowerCase() === 'put') {
             needle.put(this.url(path), payload, {json: true}, requestCallback);
+
+        // DELETE request 
+        } else if (type.toLowerCase() === 'delete') {
+            callback = payload;
+            needle.delete(this.url(path), {}, requestCallback);
 
         // otherwise, something went wrong   
         } else { 
