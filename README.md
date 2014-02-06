@@ -61,6 +61,7 @@ Returns the capabilities descriptor for HipChat.
 hipchatter.capabilities(function(err, capabilities){
     console.log(capabilities);
 });
+````
 
 ### hipchatter.rooms
 Returns all of the rooms you have access to.
