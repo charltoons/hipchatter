@@ -17,6 +17,16 @@ var DEBUG = false;
 //  Hipchatter functions
 Hipchatter.prototype = {
 
+    // Get capabilities
+    // https://www.hipchat.com/docs/apiv2/method/get_capabilities
+    capabilities: function(callback) {
+        // Make a request without an auth token, since only unauthorized users are allowed to call this resource
+        this.request('get', 'capabilities', {'token': ''}, function(err, results){
+            if(err) callback(err);
+            else callback(err, results);
+        });
+    },
+
     // Create a new room
     // https://www.hipchat.com/docs/apiv2/method/create_room
     create_room: function(params, callback){
@@ -269,7 +279,8 @@ Hipchatter.prototype = {
                 callback = payload;
                 needle.get(this.url(path), requestCallback);
             } else if (arguments.length === 4) { // with payload
-                needle.get(this.url(path, payload), requestCallback);
+                var url = (payload.hasOwnProperty('token'))? this.url(path, payload, payload.token) : this.url(path, payload);
+                needle.get(url, requestCallback);
             }
 
         // POST request
