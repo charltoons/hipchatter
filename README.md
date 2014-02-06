@@ -47,6 +47,21 @@ Usage
 Documentation
 -------------
 
+### hipchatter.capabilities
+Returns the capabilities descriptor for HipChat.
+
+**Parameters:** None
+
+**Results:**
+- `err`, error object if the request failed, null otherwise
+- `capabilities`, an object containing the capabilities of the HipChat API
+
+#### Usage
+````javascript
+hipchatter.capabilities(function(err, capabilities){
+    console.log(capabilities);
+});
+
 ### hipchatter.rooms
 Returns all of the rooms you have access to.
 
@@ -317,7 +332,7 @@ hipchatter.set_topic('Hipchatter Room', 'We Are All Talking About This', functio
 
 TODO
 ----
-- Capabilities
+- ~~Capabilities~~
 - Emoticons
     - ~~Get all emoticons~~
     - ~~Get emoticon~~
