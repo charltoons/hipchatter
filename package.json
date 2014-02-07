@@ -1,7 +1,7 @@
 {
   "name": "hipchatter",
   "description": "Wrapper for the HipChat API (v2)",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Charlton Roberts <charltonroberts@gmail.com (http://charlton.io)",
   "contributors": [
     "Macklin Underdown <macklinu@gmail.com> (http://mackli.nu)"
