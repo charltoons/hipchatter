@@ -65,6 +65,27 @@ describe('Helpers', function(){
 /** ENDPOINTS **/
 describe('Endpoints', function(){
 
+    // Get capabilities
+    describe('Get capabilities', function(){
+
+        var err, capabilities;
+
+        // Make the request
+        before(function(done){
+            hipchatter.capabilities(function(_err, _capabilities){
+                err = _err;
+                capabilities = _capabilities;
+                done();
+            });
+        });
+        it('should not return an error', function(){
+            expect(err).to.be.null;
+        });
+        it('should return capabilities', function(){
+            expect(capabilities).to.have.property('capabilities');
+        });
+    });
+
     // Create a new room
     describe('Create room', function(){
         
