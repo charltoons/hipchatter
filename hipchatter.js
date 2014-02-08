@@ -21,10 +21,7 @@ Hipchatter.prototype = {
     // https://www.hipchat.com/docs/apiv2/method/get_capabilities
     capabilities: function(callback) {
         // Make a request without an auth token, since only unauthorized users are allowed to call this resource
-        this.request('get', 'capabilities', {'token': ''}, function(err, results){
-            if(err) callback(err);
-            else callback(err, results);
-        });
+        this.request('get', 'capabilities', {'token': ''}, callback);
     },
 
     // Create a new room
@@ -112,10 +109,7 @@ Hipchatter.prototype = {
     // param = 'fonzie'; // shortcut
     //
     get_emoticon: function(param, callback) {
-        this.request('get', 'emoticon/' + param, function(err, results){
-            if (err) callback(err);
-            else callback(err, results);
-        });
+        this.request('get', 'emoticon/' + param, callback);
     },
 
     // Uses the simple "Room notification" token
@@ -195,10 +189,7 @@ Hipchatter.prototype = {
                     }
                 })(hooks[i].id);
             }
-            async.parallel(hookCalls, function(err, results){
-                if (err) return callback(true, results);
-                return callback(null, results);
-            });
+            async.parallel(hookCalls, callback);
         });
     },
     set_topic: function(room, topic, callback){
