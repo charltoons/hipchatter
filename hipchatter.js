@@ -255,6 +255,11 @@ Hipchatter.prototype = {
     // payload: optional - query string data for 'get', '' 
     // callback: required - 
     request: function(type, path, payload, callback){
+        if (this.isFunction(payload)) { // No payload
+            callback = payload;
+            payload = {};
+        }
+
         var requestCallback = function (error, response, body) {
             if (DEBUG) {console.log('RESPONSE: ', error, response, body);}
 
@@ -275,23 +280,15 @@ Hipchatter.prototype = {
 
         // GET request
         if (type.toLowerCase() === 'get') {
-            if (arguments.length === 3) { // without payload
-                callback = payload;
-                needle.get(this.url(path), requestCallback);
-            } else if (arguments.length === 4) { // with payload
-                var url = (payload.hasOwnProperty('token'))? this.url(path, payload, payload.token) : this.url(path, payload);
-                needle.get(url, requestCallback);
-            }
+            var url = payload.hasOwnProperty('token') ? this.url(path, payload, payload.token) : this.url(path, payload);
+
+            needle.get(url, requestCallback);
 
         // POST request
         } else if (type.toLowerCase() === 'post') {
-            if (arguments.length === 3) { // without payload
-                callback = payload;
-                needle.post(this.url(path), requestCallback);
-            } else if (arguments.length === 4) { // with payload
-                var url = (payload.hasOwnProperty('token'))? this.url(path, payload.token) : this.url(path);
-                needle.post(url, payload, {json: true}, requestCallback);
-            }
+            var url = payload.hasOwnProperty('token') ? this.url(path, payload.token) : this.url(path);
+
+            needle.post(url, payload, {json: true}, requestCallback);
 
         // PUT request 
         } else if (type.toLowerCase() === 'put') {
@@ -299,13 +296,16 @@ Hipchatter.prototype = {
 
         // DELETE request 
         } else if (type.toLowerCase() === 'delete') {
-            callback = payload;
             needle.delete(this.url(path), {}, requestCallback);
 
         // otherwise, something went wrong   
         } else { 
             callback(true, 'Invalid use of the hipchatter.request function.'); 
         }
+    },
+
+    isFunction: function(obj) {
+        return !!(obj && obj.constructor && obj.call && obj.apply);
     }
     /** END HELPERS **/
 }
