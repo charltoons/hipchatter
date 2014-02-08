@@ -178,6 +178,14 @@ describe('Endpoints', function(){
             expect(room).to.have.property('name');
             expect(room).to.have.property('topic');
         });
+        it('should return an error if the room does not exist', function(done){
+            hipchatter.get_room('non-existent room', function(err, message){
+                expect(err).to.be.true;
+                expect(message).to.equal('Room not found');
+
+                done();
+            });
+        });
     });
 
     // Get the history of a room

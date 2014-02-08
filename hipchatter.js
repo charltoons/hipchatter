@@ -54,10 +54,7 @@ Hipchatter.prototype = {
     // Get room
     // https://www.hipchat.com/docs/apiv2/method/get_room
     get_room: function(room, callback){
-        this.request('get', 'room/'+room, function(err, result){
-            if (err) callback(err);
-            else callback(err, result);
-        });
+        this.request('get', 'room/'+room, callback);
     },
 
     // Get history from room
