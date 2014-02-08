@@ -30,10 +30,7 @@ Hipchatter.prototype = {
     // Create a new room
     // https://www.hipchat.com/docs/apiv2/method/create_room
     create_room: function(params, callback){
-        this.request('post', 'room', params, function(err, results){
-            if (err) callback(err);
-            else callback(err, results);
-        });
+        this.request('post', 'room', params, callback);
     },
 
     // Delete a room
