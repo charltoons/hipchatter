@@ -106,6 +106,14 @@ describe('Endpoints', function(){
         it('should return a room id', function(){
             expect(room.id).to.be.a.number;
         });
+        it('should return an error if a room with the given name already exists', function(done){
+            hipchatter.create_room({name: 'Test Room'}, function(err, message){
+                expect(err).to.be.true;
+                expect(message).to.equal('Another room exists with that name.');
+
+                done();
+            });
+        });
     });
 
     // Delete the new room
