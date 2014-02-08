@@ -41,7 +41,7 @@ Usage
 
 - `<endpoint>` is the hipchatter function you are using.
 - `params` are the parameter required by the function
-- `err` will be true if there's an error, null if there's not
+- `err` error object if there is an error, null otherwise
 - `response` the direct response from the HipChat API (JSON)
 
 Documentation
@@ -213,7 +213,7 @@ Send a room notification.
     - **message_format** - html (default), text
     - **notify** (boolean) - false (default), true
 
-**Results:** `err`, `err_response`
+**Results:** `err`
 
 #### Usage
 ````javascript
@@ -240,7 +240,7 @@ Create a webhook for HipChat to ping when a certain event happens in a room.
         - Valid values: `room_message`, `room_notification`, `room_exit`, `room_enter`, `room_topic_change`
     - **name** - name for this webhook
 
-**Results:** `err`, `err_response`
+**Results:** `err`
 
 #### Usage
 ````javascript
@@ -288,10 +288,10 @@ Remove a webhook.
 
 **Parameters:**
 
-- `room` (string) — the room name or id
+- `room` (string) - the room name or id
 - `webhook_id` (string) - the id for the webhook that was returned from `create_webhook`
 
-**Results:** `err`, `err_response`
+**Results:** `err`
 
 #### Usage
 ````javascript
@@ -303,9 +303,9 @@ hipchatter.deleted_webhook('Hipchatter Room', '12345', function(err){
 ### hipchatter.delete\_all_webhooks
 A convenience function to delete all webhooks associated with a room.
 
-**Parameters:** `room` (string) — the room name or id
+**Parameters:** `room` (string) - the room name or id
 
-**Results:** `err`, `err_response`
+**Results:** `err`
 
 #### Usage
 ````javascript
@@ -319,10 +319,10 @@ Set the topic of a room.
 
 **Parameters:** 
 
-- `room` (string) — Required. The room name or id.
+- `room` (string) - Required. The room name or id.
 - `topic` (string) - Required. The topic that this room will be set to.
 
-**Results:** `err`, `err_response`
+**Results:** `err`
 
 #### Usage
 ````javascript

@@ -135,19 +135,19 @@ Hipchatter.prototype = {
             this.request('post', 'room/'+room+'/notification', {message: message, token: token}, callback);
         }
         else if (typeof options != 'object' && typeof options == 'function') {
-            options(true, "Must supply an options object to the notify function containing at least the message and the room notification token. See https://www.hipchat.com/docs/apiv2/method/send_room_notification");
+            options(new Error('Must supply an options object to the notify function containing at least the message and the room notification token. See https://www.hipchat.com/docs/apiv2/method/send_room_notification'));
         }
         else if (!options.hasOwnProperty('message') || (!options.hasOwnProperty('token'))) {
-            callback(true, "Message and Room Notification token are required.");
+            callback(new Error('Message and Room Notification token are required.'));
         }
         else this.request('post', 'room/'+room+'/notification', options, callback);
     },
     create_webhook: function(room, options, callback){
         if (typeof options != 'object' && typeof options == 'function') {
-            options(true, "Must supply an options object to the notify function containing at least the message and the room notification token. See https://www.hipchat.com/docs/apiv2/method/send_room_notification");
+            options(new Error('Must supply an options object to the notify function containing at least the message and the room notification token. See https://www.hipchat.com/docs/apiv2/method/send_room_notification'));
         }
         else if (!options.hasOwnProperty('url') || (!options.hasOwnProperty('event'))) {
-            callback(true, "URL and Event are required.");
+            callback(new Error('URL and Event are required.'));
         }
         else this.request('post', 'room/'+room+'/webhook', options, callback);
     },
@@ -160,12 +160,12 @@ Hipchatter.prototype = {
     delete_webhook: function(room, id, callback){
         needle.delete(this.url('room/'+room+'/webhook/'+id), null, function (error, response, body) {
             // Connection error
-            if (!!error) callback(true, 'HipChat API Error.');
+            if (!!error) callback(new Error('HipChat API Error.'));
 
             // HipChat returned an error or no HTTP Success status code
             else if (body.hasOwnProperty('error') || response.statusCode < 200 || response.statusCode >= 300){
-                try { callback(true, body.error.message); }
-                catch (e) {callback(true, body); }
+                try { callback(new Error(body.error.message)); }
+                catch (e) {callback(new Error(body)); }
             }
 
             // Everything worked
@@ -177,7 +177,7 @@ Hipchatter.prototype = {
     delete_all_webhooks: function(room, callback){
         var self = this;
         this.webhooks(room, function(err, response){
-            if (err) return callback(true, response);
+            if (err) return callback(new Error(response));
             
             var hooks = response.items;
             var hookCalls = [];
@@ -249,12 +249,12 @@ Hipchatter.prototype = {
             if (DEBUG) {console.log('RESPONSE: ', error, response, body);}
 
             // Connection error
-            if (!!error) callback(true, 'HipChat API Error.');
+            if (!!error) callback(new Error('HipChat API Error.'));
 
             // HipChat returned an error or no HTTP Success status code
             else if (body.hasOwnProperty('error') || response.statusCode < 200 || response.statusCode >= 300){
-                try { callback(true, body.error.message); }
-                catch (e) {callback(true, body); }
+                try { callback(new Error(body.error.message)); }
+                catch (e) {callback(new Error(body)); }
             }
 
             // Everything worked
@@ -285,7 +285,7 @@ Hipchatter.prototype = {
 
         // otherwise, something went wrong   
         } else { 
-            callback(true, 'Invalid use of the hipchatter.request function.'); 
+            callback(new Error('Invalid use of the hipchatter.request function.'));
         }
     },
 
