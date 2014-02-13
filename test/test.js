@@ -10,6 +10,7 @@ catch (e) { console.error('Create test/settings.json and populate with your cred
 // Setup hipchatter
 var Hipchatter = require(__dirname+'/../hipchatter.js');
 var hipchatter;
+var ownerId;
 
 
 describe('Creating hipchatter object', function(){
@@ -106,23 +107,12 @@ describe('Endpoints', function(){
         it('should return a room id', function(){
             expect(room.id).to.be.a.number;
         });
-    });
+        it('should return an error if a room with the given name already exists', function(done){
+            hipchatter.create_room({name: 'Test Room'}, function(err){
+                expect(err.message).to.equal('Another room exists with that name.');
 
-    // Delete the new room
-    describe('Delete room', function(){
-        
-        // Set scope for the responses
-        var err;
-
-        // Make the request
-        before(function(done){
-            hipchatter.delete_room('Test Room', function(_err){
-                err = _err;
                 done();
             });
-        });
-        it('should not return an error', function(){
-            expect(err).to.be.null;
         });
     });
 
@@ -173,10 +163,63 @@ describe('Endpoints', function(){
         it('should return the details of the room', function(){
             expect(room).to.be.ok;
             expect(room).to.not.be.empty;
+            ownerId = room.owner.id;
         });
         it('should return a room name and topic, at least', function(){
             expect(room).to.have.property('name');
             expect(room).to.have.property('topic');
+        });
+        it('should return an error if the room does not exist', function(done){
+            hipchatter.get_room('non-existent room', function(err){
+                expect(err.message).to.equal('Room not found');
+
+                done();
+            });
+        });
+    });
+
+    describe('Update room', function(){        
+        // Set scope for the responses        
+        var err, status;
+        // Make the request
+        before(function(done){            
+            hipchatter.update_room( { 
+                name: settings.test_room, 
+                privacy: 'public', 
+                is_archived: false, 
+                is_guest_accessible: false, 
+                topic: "New Topic", 
+                owner: {id: ownerId}
+            }, function(_err, _body, _status) {
+                    err = _err;
+                    status = _status;
+                    done();
+                }
+            );
+        });
+        it('should not return an error', function(){
+            expect(err).to.be.null;
+        });
+        it('should return status code 204', function() {
+            expect(status).to.equal(204);
+        });        
+    });
+    
+     // Delete the new room
+    describe('Delete room', function(){
+        
+        // Set scope for the responses
+        var err;
+
+        // Make the request
+        before(function(done){
+            hipchatter.delete_room('Test Room', function(_err){
+                err = _err;
+                done();
+            });
+        });
+        it('should not return an error', function(){
+            expect(err).to.be.null;
         });
     });
 
@@ -202,9 +245,8 @@ describe('Endpoints', function(){
             expect(history.items[0]).to.have.property('message');
         });
         it('should return an error if the room does not exist', function(done){
-            hipchatter.history('non-existent room', function(_err, msg){
-                err = _err;
-                expect(msg).to.equal('Room not found');
+            hipchatter.history('non-existent room', function(err){
+                expect(err.message).to.equal('Room not found');
                 done();
             });
         });
@@ -365,8 +407,7 @@ describe('Endpoints', function(){
 
         it('should throw an error if no object is passed', function(done){
             hipchatter.notify(settings.test_room, function(err, response, body){
-                expect(err).to.be.true;
-                expect(response).to.contain('options');
+                expect(err.message).to.equal('Must supply an options object to the notify function containing at least the message and the room notification token. See https://www.hipchat.com/docs/apiv2/method/send_room_notification');
                 done();
             });
         });
@@ -374,8 +415,7 @@ describe('Endpoints', function(){
         it('should throw an error if required options aren\'t passed', function(done){
 
            hipchatter.notify(settings.test_room, {message: "No Auth token"}, function(err, response){
-                expect(err).to.be.true;
-                expect(response).to.contain('token');
+                expect(err.message).to.equal('Message and Room Notification token are required.');
                 done();
             });
         });
