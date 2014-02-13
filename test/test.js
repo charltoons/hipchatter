@@ -10,6 +10,7 @@ catch (e) { console.error('Create test/settings.json and populate with your cred
 // Setup hipchatter
 var Hipchatter = require(__dirname+'/../hipchatter.js');
 var hipchatter;
+var ownerId;
 
 
 describe('Creating hipchatter object', function(){
@@ -180,6 +181,7 @@ describe('Endpoints', function(){
         it('should return the details of the room', function(){
             expect(room).to.be.ok;
             expect(room).to.not.be.empty;
+            ownerId = room.owner.id;
         });
         it('should return a room name and topic, at least', function(){
             expect(room).to.have.property('name');
@@ -191,6 +193,51 @@ describe('Endpoints', function(){
 
                 done();
             });
+        });
+    });
+
+    describe('Update room', function(){        
+        // Set scope for the responses        
+        var err, status;
+        // Make the request
+        before(function(done){            
+            hipchatter.update_room( { 
+                name: settings.test_room, 
+                privacy: 'public', 
+                is_archived: false, 
+                is_guest_accessible: false, 
+                topic: "New Topic", 
+                owner: {id: ownerId}
+            }, function(_err, _body, _status) {
+                    err = _err;
+                    status = _status;
+                    done();
+                }
+            );
+        });
+        it('should not return an error', function(){
+            expect(err).to.be.null;
+        });
+        it('should return status code 204', function() {
+            expect(status).to.equal(204);
+        });        
+    });
+    
+     // Delete the new room
+    describe('Delete room', function(){
+        
+        // Set scope for the responses
+        var err;
+
+        // Make the request
+        before(function(done){
+            hipchatter.delete_room('Test Room', function(_err){
+                err = _err;
+                done();
+            });
+        });
+        it('should not return an error', function(){
+            expect(err).to.be.null;
         });
     });
 

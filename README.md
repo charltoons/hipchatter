@@ -339,12 +339,12 @@ TODO
     - ~~Get emoticon~~
 - OAuth Sessions
 - Rooms
-    - Create room
+    - ~~Create room
     - ~~Get all rooms~~
     - ~~Send room notification~~
     - Update room
     - ~~Get room~~
-    - Delete room
+    - ~~Delete room
     - ~~Create webhook~~
     - ~~Get all webhooks~~
     - Get all members
