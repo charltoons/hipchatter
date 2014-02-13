@@ -116,24 +116,6 @@ describe('Endpoints', function(){
         });
     });
 
-    // Delete the new room
-    describe('Delete room', function(){
-        
-        // Set scope for the responses
-        var err;
-
-        // Make the request
-        before(function(done){
-            hipchatter.delete_room('Test Room', function(_err){
-                err = _err;
-                done();
-            });
-        });
-        it('should not return an error', function(){
-            expect(err).to.be.null;
-        });
-    });
-
     // Get all rooms
     describe('Get all rooms', function(){
         
