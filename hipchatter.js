@@ -24,6 +24,12 @@ Hipchatter.prototype = {
         this.request('get', 'capabilities', {'token': ''}, callback);
     },
 
+    // Updates a room
+    // https://www.hipchat.com/docs/apiv2/method/update_room
+    update_room: function(params, callback) {
+        this.request('put', 'room/'+params.name, params, callback)
+    },
+
     // Create a new room
     // https://www.hipchat.com/docs/apiv2/method/create_room
     create_room: function(params, callback){
@@ -238,7 +244,7 @@ Hipchatter.prototype = {
     // type: required - type of REST request ('get' or 'post' currently)
     // path: required - 
     // payload: optional - query string data for 'get', '' 
-    // callback: required - 
+    // callback: required -      
     request: function(type, path, payload, callback){
         if (this.isFunction(payload)) { // No payload
             callback = payload;
@@ -259,7 +265,7 @@ Hipchatter.prototype = {
 
             // Everything worked
             else {
-                callback(null, body);
+                callback(null, body, response.statusCode);
             }
         };
 
