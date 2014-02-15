@@ -360,6 +360,34 @@ describe('Endpoints', function(){
         });        
     });
 
+    // Add a member to a room
+    describe('Add a member to a room', function() {
+        var err, response, params;
+        params = {
+            room_name: settings.test_room, 
+            user_email: 'testuser@testuser.com'
+        };
+
+        before(function(done) {
+            hipchatter.add_member(params, function(_err, _body, _response) {
+                err = _err;
+                response = _response;
+                done();
+            });
+        });
+
+        it('should not return an error', function() {
+            expect(err).to.be.null;
+        });
+
+        it('should return status code 204 when the user is succesfully added to the room', function() {
+            expect(response).to.equal(204);
+        });
+        
+    });
+
+
+
     //Deleting a user works, but i don't get the correct response code, API bug or am i missing something.
     // Deletes a user
     describe('Delete User', function() {

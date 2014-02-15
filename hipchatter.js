@@ -56,7 +56,11 @@ Hipchatter.prototype = {
     get_room: function(room, callback){
         this.request('get', 'room/'+room, callback);
     },
-
+    // Add a member to a room
+    // https://www.hipchat.com/docs/apiv2/method/add_member
+    add_member: function(params, callback) {
+        this.request('put', 'room/'+params.room_name+'/member/'+params.user_email, callback);
+    },
     // Get history from room
     // Takes either a room id or room name as a parameter
     // https://www.hipchat.com/docs/apiv2/method/view_history
