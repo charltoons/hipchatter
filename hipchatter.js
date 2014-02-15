@@ -92,6 +92,11 @@ Hipchatter.prototype = {
     delete_user: function(user, callback) {
         this.request('delete', 'user/'+user, callback);
     },
+    // Send a private message to a user
+    // https://www.hipchat.com/docs/apiv2/method/private_message_user
+    send_private_message: function(user, message, callback) {
+        this.request('post', 'user/'+user+'/message', message, callback);
+    },
 
     // Get emoticons
     //

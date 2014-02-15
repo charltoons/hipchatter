@@ -311,6 +311,28 @@ describe('Endpoints', function(){
     });
 
     // View user
+    describe('Send a private message to a user', function() {
+        var err, response;
+
+        before(function(done) {
+            hipchatter.send_private_message('testuser@testuser.com', {message: 'Private message for you'}, function(_err, _body, _response) {
+                err = _err;
+                response = _response;
+                done();
+            });
+        });
+
+        it('should not return an error', function() {
+            expect(err).to.be.null;
+        });
+
+        it('should return status code 204 when the private message is succesfully send', function() {
+            expect(response).to.equal(204);
+        });
+        
+    });
+
+    // View user
     describe('Update User', function() {
         var err, response;
 
@@ -335,8 +357,7 @@ describe('Endpoints', function(){
 
         it('should return status code 204 when the update succeeded', function() {
             expect(response).to.equal(204);
-        });
-        
+        });        
     });
 
     //Deleting a user works, but i don't get the correct response code, API bug or am i missing something.
