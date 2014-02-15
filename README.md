@@ -350,7 +350,7 @@ TODO
     - ~~Get all members~~
     - ~~Set topic~~
     - ~~Add member~~
-    - Remove member
+    - ~~Remove member~~
     - ~~Delete webhook~~
     - ~~Get webhook~~
     - ~~View History~~
