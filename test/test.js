@@ -288,6 +288,57 @@ describe('Endpoints', function(){
         });
     });
 
+    // View user
+    describe('View User', function() {
+        var user, err;
+
+        before(function(done) {
+            hipchatter.view_user('testuser@testuser.com', function(_err, _user) {
+                err = _err;
+                user = _user;
+                done();
+            });
+        });
+        it('should not return an error', function() {
+            expect(err).to.be.null;
+        });
+
+        it('should return the requested user to have a title and name, at least', function() {
+            expect(user).to.have.property('title');
+            expect(user).to.have.property('name');
+        });
+        
+    });
+
+    // View user
+    describe('Update User', function() {
+        var err, response;
+
+        before(function(done) {
+            hipchatter.update_user({
+                name: 'Updated Test User',
+                title: 'Test User Updated Title',
+                mention_name: 'UpdatedTestMention',
+                is_group_admin: false,
+                timezone: 'UTC',
+                password: '',
+                email: 'testuser@testuser.com'
+            }, function(_err, _user, _response) {
+                err = _err;
+                response = _response;
+                done();
+            });
+        });
+        it('should not return an error', function() {
+            expect(err).to.be.null;
+        });
+
+        it('should return status code 204 when the update succeeded', function() {
+            expect(response).to.equal(204);
+        });
+        
+    });
+
     //Deleting a user works, but i don't get the correct response code, API bug or am i missing something.
     // Deletes a user
     describe('Delete User', function() {

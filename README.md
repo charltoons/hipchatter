@@ -357,9 +357,9 @@ TODO
     - Invite user
 - Users
     - Private message user
-    - Update user
+    - ~~Update user~~
     - ~~Delete user~~ -> Works but test fails, am i missing something ?
-    - View user
+    - ~~View user~~
     - ~~Create user~~
     - ~~Get all users~~
 - Misc
