@@ -72,11 +72,21 @@ Hipchatter.prototype = {
         });
     },
 
+    // View user details
+    // https://www.hipchat.com/docs/apiv2/method/view_user
+    view_user: function(user, callback) {
+        this.request('get', 'user/'+user, callback);
+    },
+    // Update a user
+    // https://www.hipchat.com/docs/apiv2/method/update_user
+    update_user: function(params, callback) {
+        this.request('put', 'user/'+params.email, params, callback)
+    },
     // Creates a user
     // https://www.hipchat.com/docs/apiv2/method/create_user
     create_user: function(params, callback) {
         this.request('post', 'user', params, callback);
-    },
+    },    
     // Deletes a user
     // https://www.hipchat.com/docs/apiv2/method/delete_user
     delete_user: function(user, callback) {
