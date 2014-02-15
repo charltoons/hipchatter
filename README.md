@@ -344,7 +344,7 @@ TODO
     - ~~Send room notification~~
     - ~~Update room~~
     - ~~Get room~~
-    - ~~Delete room
+    - ~~Delete room~~
     - ~~Create webhook~~
     - ~~Get all webhooks~~
     - ~~Get all members~~
