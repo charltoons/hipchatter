@@ -63,6 +63,25 @@ Hipchatter.prototype = {
     history: function(room, callback){
         this.request('get', 'room/'+room+'/history', callback);
     },
+    // Get all users
+    // https://www.hipchat.com/docs/apiv2/method/get_all_users
+    users: function(callback) {
+        this.request('get', 'user', function(err, results) {
+            if(err) callback(err);
+            else callback(err, results.items)
+        });
+    },
+
+    // Creates a user
+    // https://www.hipchat.com/docs/apiv2/method/create_user
+    create_user: function(params, callback) {
+        this.request('post', 'user', params, callback);
+    },
+    // Deletes a user
+    // https://www.hipchat.com/docs/apiv2/method/delete_user
+    delete_user: function(user, callback) {
+        this.request('delete', 'user/'+user, callback);
+    },
 
     // Get emoticons
     //
