@@ -356,7 +356,7 @@ TODO
     - ~~View History~~
     - Invite user
 - Users
-    - Private message user
+    - ~~Private message user~~
     - ~~Update user~~
     - ~~Delete user~~ -> Works but test fails, am i missing something ?
     - ~~View user~~
