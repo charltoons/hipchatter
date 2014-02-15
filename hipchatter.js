@@ -62,9 +62,14 @@ Hipchatter.prototype = {
         this.request('put', 'room/'+params.room_name+'/member/'+params.user_email, callback);
     },
     // Delete a member from a room
-    // https://www.hipchat.com/docs/apiv2/method/add_member
+    // https://www.hipchat.com/docs/apiv2/method/remove_member
     delete_member: function(params, callback) {
         this.request('delete', 'room/'+params.room_name+'/member/'+params.user_email, callback);
+    },
+    // Invite a user to a room.
+    // https://www.hipchat.com/docs/apiv2/method/invite_member
+    invite_member: function(params, reason, callback) {
+        this.request('post', 'room/'+params.room_name+'/invite/'+params.user_email, reason, callback);
     },
     // Get history from room
     // Takes either a room id or room name as a parameter

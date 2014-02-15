@@ -354,7 +354,7 @@ TODO
     - ~~Delete webhook~~
     - ~~Get webhook~~
     - ~~View History~~
-    - Invite user
+    - ~~Invite user~~
 - Users
     - ~~Private message user~~
     - ~~Update user~~
