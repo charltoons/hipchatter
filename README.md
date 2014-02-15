@@ -349,7 +349,7 @@ TODO
     - ~~Get all webhooks~~
     - ~~Get all members~~
     - ~~Set topic~~
-    - Add member
+    - ~~Add member~~
     - Remove member
     - ~~Delete webhook~~
     - ~~Get webhook~~
