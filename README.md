@@ -339,15 +339,15 @@ TODO
     - ~~Get emoticon~~
 - OAuth Sessions
 - Rooms
-    - ~~Create room
+    - ~~Create room~~
     - ~~Get all rooms~~
     - ~~Send room notification~~
-    - Update room
+    - ~~Update room~~
     - ~~Get room~~
     - ~~Delete room
     - ~~Create webhook~~
     - ~~Get all webhooks~~
-    - Get all members
+    - ~~Get all members~~
     - ~~Set topic~~
     - Add member
     - Remove member
@@ -358,10 +358,10 @@ TODO
 - Users
     - Private message user
     - Update user
-    - Delete user
+    - ~~Delete user~~ -> Works but test fails, am i missing something ?
     - View user
-    - Create user
-    - Get all users
+    - ~~Create user~~
+    - ~~Get all users~~
 - Misc
     - Error events for things like rate limits
     - Addon helpers
