@@ -8,9 +8,8 @@ var colors = require('colors')
 var Hipchatter = require(__dirname+'/../hipchatter.js');
 var hipchatter = new Hipchatter(settings.apikey);
 
-// Create a room to run tests from
-hipchatter.create_room({name : settings.test_room}, function(err, room){
-    if (err == null) console.log(('\n\nCreated "'+settings.test_room+'" room with id: '+room.id+'\n\n').green);
-    else console.error('\n\nError creating room:'.red, err, '\n\n');
+// Create a user to run tests from
+hipchatter.create_user(settings.test_user, function(err, body){
+    if (err == null) console.log(('\n\nCreated "'+settings.test_user.name+'\n\n').green);
+    else console.error('\n\nError creating user:'.red, err, '\n\n');
 });
-
