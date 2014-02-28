@@ -12,7 +12,7 @@ var Hipchatter = require(__dirname+'/../hipchatter.js');
 var hipchatter = new Hipchatter(settings.apikey);
 
 // Get emoticon(s)
-describe.skip('Emoticons', function(){
+describe('Emoticons', function(){
     describe('Get all emoticons', function(){
         // Set scope for the responses
         var err, emoticons;

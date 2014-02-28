@@ -13,7 +13,7 @@ var hipchatter = new Hipchatter(settings.apikey);
 var ownerId;
 
 /** ENDPOINTS **/
-describe.skip('Rooms -- BREAD', function(){
+describe('Rooms -- BREAD', function(){
 
     // BROWSE
     describe('Get all rooms', function(){

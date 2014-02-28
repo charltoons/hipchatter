@@ -11,7 +11,7 @@ catch (e) { console.error('Create test/settings.json and populate with your cred
 var Hipchatter = require(__dirname+'/../hipchatter.js');
 var hipchatter = new Hipchatter(settings.apikey);
 
-describe.skip('Rooms -- operations', function(){
+describe('Rooms -- operations', function(){
 
     // Get the history of a room
     describe('View history', function(){
