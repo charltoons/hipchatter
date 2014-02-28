@@ -56,12 +56,60 @@ Hipchatter.prototype = {
     get_room: function(room, callback){
         this.request('get', 'room/'+room, callback);
     },
-
+    // Add a member to a room
+    // https://www.hipchat.com/docs/apiv2/method/add_member
+    add_member: function(params, callback) {
+        this.request('put', 'room/'+params.room_name+'/member/'+params.user_email, callback);
+    },
+    // Delete a member from a room
+    // https://www.hipchat.com/docs/apiv2/method/remove_member
+    delete_member: function(params, callback) {
+        this.request('delete', 'room/'+params.room_name+'/member/'+params.user_email, callback);
+    },
+    // Invite a user to a room.
+    // https://www.hipchat.com/docs/apiv2/method/invite_member
+    invite_member: function(params, reason, callback) {
+        this.request('post', 'room/'+params.room_name+'/invite/'+params.user_email, reason, callback);
+    },
     // Get history from room
     // Takes either a room id or room name as a parameter
     // https://www.hipchat.com/docs/apiv2/method/view_history
     history: function(room, callback){
         this.request('get', 'room/'+room+'/history', callback);
+    },
+    // Get all users
+    // https://www.hipchat.com/docs/apiv2/method/get_all_users
+    users: function(callback) {
+        this.request('get', 'user', function(err, results) {
+            if(err) callback(err);
+            else callback(err, results.items)
+        });
+    },
+
+    // View user details
+    // https://www.hipchat.com/docs/apiv2/method/view_user
+    view_user: function(user, callback) {
+        this.request('get', 'user/'+user, callback);
+    },
+    // Update a user
+    // https://www.hipchat.com/docs/apiv2/method/update_user
+    update_user: function(params, callback) {
+        this.request('put', 'user/'+params.email, params, callback)
+    },
+    // Creates a user
+    // https://www.hipchat.com/docs/apiv2/method/create_user
+    create_user: function(params, callback) {
+        this.request('post', 'user', params, callback);
+    },    
+    // Deletes a user
+    // https://www.hipchat.com/docs/apiv2/method/delete_user
+    delete_user: function(user, callback) {
+        this.request('delete', 'user/'+user, callback);
+    },
+    // Send a private message to a user
+    // https://www.hipchat.com/docs/apiv2/method/private_message_user
+    send_private_message: function(user, message, callback) {
+        this.request('post', 'user/'+user+'/message', message, callback);
     },
 
     // Get emoticons
