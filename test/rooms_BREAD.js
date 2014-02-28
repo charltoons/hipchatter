@@ -13,7 +13,7 @@ var hipchatter = new Hipchatter(settings.apikey);
 var ownerId;
 
 /** ENDPOINTS **/
-describe.skip('Rooms -- BREAD', function(){
+describe('Rooms -- BREAD', function(){
 
     // BROWSE
     describe('Get all rooms', function(){
@@ -51,7 +51,7 @@ describe.skip('Rooms -- BREAD', function(){
         // Make the request
         // Make it private cause of the restriction of removing users
         before(function(done){
-            hipchatter.create_room({name : settings.test_room}, function(_err, _room){
+            hipchatter.create_room({name : settings.disposable_room}, function(_err, _room){
                 err = _err;
                 room = _room;
                 done();
@@ -64,7 +64,7 @@ describe.skip('Rooms -- BREAD', function(){
             expect(room.id).to.be.a.number;
         });
         it('should return an error if a room with the given name already exists', function(done){
-            hipchatter.create_room({name: settings.test_room}, function(err){
+            hipchatter.create_room({name: settings.disposable_room}, function(err){
                 expect(err.message).to.equal('Another room exists with that name.');
 
                 done();
@@ -82,7 +82,7 @@ describe.skip('Rooms -- BREAD', function(){
 
         // Make the request
         before(function(done){
-            hipchatter.get_room(settings.test_room, function(_err, _room){
+            hipchatter.get_room(settings.disposable_room, function(_err, _room){
                 err = _err;
                 room = _room;
                 done();
@@ -116,7 +116,7 @@ describe.skip('Rooms -- BREAD', function(){
         // Make the request
         before(function(done){            
             hipchatter.update_room( { 
-                name: settings.test_room, 
+                name: settings.disposable_room, 
                 privacy: 'private', 
                 is_archived: false, 
                 is_guest_accessible: false, 
@@ -145,7 +145,7 @@ describe.skip('Rooms -- BREAD', function(){
 
         // Make the request
         before(function(done){
-            hipchatter.delete_room(settings.test_room, function(_err){
+            hipchatter.delete_room(settings.disposable_room, function(_err){
                 err = _err;
                 done();
             });
@@ -154,4 +154,7 @@ describe.skip('Rooms -- BREAD', function(){
             expect(err).to.be.null;
         });
     });
+
+    // TODO check if exists
+
 });

@@ -1,6 +1,32 @@
 {
     "apikey": "<your api key>",
-    "test_room": "Hipchatter",
     "room_token":"<room notification token>",
-    "webhook_url":"http://google.com"
+    "webhook_url": "http://google.com",
+
+    // Test room and user should exist prior to running tests.
+    // You can generate them by calling `grunt stub`
+    "test_room": "Hipchatter",
+    "test_user": {
+        "name": "Hipchatter Test User",
+        "title": "Hipchatter Test User Title",
+        "mention_name": "hipchatterTestUserMention",
+        "is_group_admin": false,
+        "timezone": "UTC",
+        "password": "",
+        "email": "testuser@hipchatter.com"
+    },
+
+    // Disposable room and user should not exist prior to running tests.
+    // These will be created & deleted over the course of testing and should
+    // not be used other than to test "BREAD" operations on them
+    "disposable_room": "Hipchatter Disposable Room",
+    "disposable_user": {
+        "name": "Hipchatter Disposable User",
+        "title": "Hipchatter Disposable User Title",
+        "mention_name": "hipchatterDisposableUserMention",
+        "is_group_admin": false,
+        "timezone": "UTC",
+        "password": "",
+        "email": "disposableuser@hipchatter.com"
+    }
 }
