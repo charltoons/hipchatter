@@ -11,7 +11,7 @@ catch (e) { console.error('Create test/settings.json and populate with your cred
 var Hipchatter = require(__dirname+'/../hipchatter.js');
 var hipchatter = new Hipchatter(settings.apikey);
 
-describe('Users', function() {
+describe.skip('Users', function() {
 
     // Get all users
     describe('Get All Users', function() {
