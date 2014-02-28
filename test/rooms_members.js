@@ -11,14 +11,14 @@ catch (e) { console.error('Create test/settings.json and populate with your cred
 var Hipchatter = require(__dirname+'/../hipchatter.js');
 var hipchatter = new Hipchatter(settings.apikey);
 
-describe.skip('Rooms -- members', function(){
+describe('Rooms -- members', function(){
 
     // Add a member to a room
     describe('Add a member to a room', function() {
         var err, response, params;
         params = {
             room_name: settings.test_room, 
-            user_email: 'testuser@testuser.com'
+            user_email: settings.test_user.email
         };
 
         before(function(done) {
@@ -44,7 +44,7 @@ describe.skip('Rooms -- members', function(){
         var err, response, params;
         params = {
             room_name: settings.test_room, 
-            user_email: 'testuser@testuser.com'
+            user_email: settings.test_user.email
         };
 
         before(function(done) {
@@ -70,7 +70,7 @@ describe.skip('Rooms -- members', function(){
         var err, response, params;
         params = {
             room_name: settings.test_room, 
-            user_email: 'testuser@testuser.com'
+            user_email: settings.test_user.email
         };
 
         before(function(done) {
