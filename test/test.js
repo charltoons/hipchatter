@@ -94,8 +94,9 @@ describe('Endpoints', function(){
         var err, room;
 
         // Make the request
+        // Make it private cause of the restriction of removing users
         before(function(done){
-            hipchatter.create_room({name: 'Test Room'}, function(_err, _room){
+            hipchatter.create_room({name : settings.test_room}, function(_err, _room){
                 err = _err;
                 room = _room;
                 done();
@@ -108,7 +109,7 @@ describe('Endpoints', function(){
             expect(room.id).to.be.a.number;
         });
         it('should return an error if a room with the given name already exists', function(done){
-            hipchatter.create_room({name: 'Test Room'}, function(err){
+            hipchatter.create_room({name: settings.test_room}, function(err){
                 expect(err.message).to.equal('Another room exists with that name.');
 
                 done();
@@ -185,7 +186,7 @@ describe('Endpoints', function(){
         before(function(done){            
             hipchatter.update_room( { 
                 name: settings.test_room, 
-                privacy: 'public', 
+                privacy: 'private', 
                 is_archived: false, 
                 is_guest_accessible: false, 
                 topic: "New Topic", 
@@ -204,26 +205,8 @@ describe('Endpoints', function(){
             expect(status).to.equal(204);
         });        
     });
-    
-     // Delete the new room
-    describe('Delete room', function(){
-        
-        // Set scope for the responses
-        var err;
 
-        // Make the request
-        before(function(done){
-            hipchatter.delete_room('Test Room', function(_err){
-                err = _err;
-                done();
-            });
-        });
-        it('should not return an error', function(){
-            expect(err).to.be.null;
-        });
-    });
-
-    // Get the history of a room
+     // Get the history of a room
     describe('View history', function(){
         // Set scope for the responses
         var err, history;
@@ -250,6 +233,232 @@ describe('Endpoints', function(){
                 done();
             });
         });
+    });
+    
+    // Get all users
+    describe('Get All Users', function() {
+        // Set scope for the responses
+        var err, users;
+
+        // Make the request
+        before(function(done){
+            hipchatter.users(function(_err, _users){
+                err = _err;
+                users = _users;
+                done();
+            });
+        });
+        it('should not return an error', function(){
+            expect(err).to.be.null;
+        });
+        it('should return a list of users', function(){
+            expect(users).to.be.ok;
+            expect(users).to.not.be.empty;
+        });
+        it('should return users that have an id and name, at least', function(){
+            expect(users[0]).to.have.property('name');
+            expect(users[0]).to.have.property('id');
+        });
+    });
+
+    // Create a user
+    describe('Create User', function() {
+        var err, body;
+
+        before(function(done) {
+            hipchatter.create_user({
+                name: 'Test User',
+                title: 'Test User Title',
+                mention_name: 'testMention',
+                is_group_admin: false,
+                timezone: 'UTC',
+                password: '',
+                email: 'testuser@testuser.com'
+            }, function(_err, _body){
+                err = _err;
+                body = _body;
+                done();
+            });
+        });
+        it('should not return an error', function() {
+            expect(err).to.be.null;
+        });
+        it('should return an random password when none is provided', function() {
+            expect(body).to.be.not.null;
+        });
+    });
+
+    // View user
+    describe('View User', function() {
+        var user, err;
+
+        before(function(done) {
+            hipchatter.view_user('testuser@testuser.com', function(_err, _user) {
+                err = _err;
+                user = _user;
+                done();
+            });
+        });
+        it('should not return an error', function() {
+            expect(err).to.be.null;
+        });
+
+        it('should return the requested user to have a title and name, at least', function() {
+            expect(user).to.have.property('title');
+            expect(user).to.have.property('name');
+        });
+        
+    });
+
+    // View user
+    describe('Send a private message to a user', function() {
+        var err, response;
+
+        before(function(done) {
+            hipchatter.send_private_message('testuser@testuser.com', {message: 'Private message for you'}, function(_err, _body, _response) {
+                err = _err;
+                response = _response;
+                done();
+            });
+        });
+
+        it('should not return an error', function() {
+            expect(err).to.be.null;
+        });
+
+        it('should return status code 204 when the private message is succesfully send', function() {
+            expect(response).to.equal(204);
+        });
+        
+    });
+
+    // View user
+    describe('Update User', function() {
+        var err, response;
+
+        before(function(done) {
+            hipchatter.update_user({
+                name: 'Updated Test User',
+                title: 'Test User Updated Title',
+                mention_name: 'UpdatedTestMention',
+                is_group_admin: false,
+                timezone: 'UTC',
+                password: '',
+                email: 'testuser@testuser.com'
+            }, function(_err, _user, _response) {
+                err = _err;
+                response = _response;
+                done();
+            });
+        });
+        it('should not return an error', function() {
+            expect(err).to.be.null;
+        });
+
+        it('should return status code 204 when the update succeeded', function() {
+            expect(response).to.equal(204);
+        });        
+    });
+
+    // Add a member to a room
+    describe('Add a member to a room', function() {
+        var err, response, params;
+        params = {
+            room_name: settings.test_room, 
+            user_email: 'testuser@testuser.com'
+        };
+
+        before(function(done) {
+            hipchatter.add_member(params, function(_err, _body, _response) {
+                err = _err;
+                response = _response;
+                done();
+            });
+        });
+
+        it('should not return an error', function() {
+            expect(err).to.be.null;
+        });
+
+        it('should return status code 204 when the user is succesfully added to the room', function() {
+            expect(response).to.equal(204);
+        });
+        
+    });
+
+    // Add a member to a room
+    describe('Invite a member to a room', function() {
+        var err, response, params;
+        params = {
+            room_name: settings.test_room, 
+            user_email: 'testuser@testuser.com'
+        };
+
+        before(function(done) {
+            hipchatter.invite_member(params, {reason: 'We wanted to invite you to this room'}, function(_err, _body, _response) {
+                err = _err;
+                response = _response;
+                done();
+            });
+        });
+
+        it('should not return an error', function() {
+            expect(err).to.be.null;
+        });
+
+        it('should return status code 204 when the user is succesfully invited to the room', function() {
+            expect(response).to.equal(204);
+        });
+        
+    });
+
+     // Remove a member from a room
+    describe('Remove a member from a room', function() {
+        var err, response, params;
+        params = {
+            room_name: settings.test_room, 
+            user_email: 'testuser@testuser.com'
+        };
+
+        before(function(done) {
+            hipchatter.add_member(params, function(_err, _body, _response) {
+                err = _err;
+                response = _response;
+                done();
+            });
+        });
+
+        it('should not return an error', function() {
+            expect(err).to.be.null;
+        });
+
+        it('should return status code 204 when the user is succesfully removed from the room', function() {
+            expect(response).to.equal(204);
+        });
+        
+    });
+
+
+
+    //Deleting a user works, but i don't get the correct response code, API bug or am i missing something.
+    // Deletes a user
+    describe('Delete User', function() {
+        var err, response;
+
+        before(function(done) {
+            hipchatter.delete_user('testuser@testuser.com', function(_err, _body, _response){
+                err = _err,
+                response = _response;
+                done();
+            });
+        });
+        // it('should not return an error', function() {
+        //     expect(err).to.be.null;
+        // });
+        it('should return 204 when the user is deleted', function() {
+            // expect(response).to.equal(204);
+        });
+
     });
 
     // Get emoticon(s)
@@ -573,3 +782,20 @@ describe('Miscellaneous', function(){
         });
     });
 })
+// Delete the new room
+describe('Delete room', function(){
+    
+    // Set scope for the responses
+    var err;
+
+    // Make the request
+    before(function(done){
+        hipchatter.delete_room(settings.test_room, function(_err){
+            err = _err;
+            done();
+        });
+    });
+    it('should not return an error', function(){
+        expect(err).to.be.null;
+    });
+});

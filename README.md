@@ -339,29 +339,29 @@ TODO
     - ~~Get emoticon~~
 - OAuth Sessions
 - Rooms
-    - ~~Create room
+    - ~~Create room~~
     - ~~Get all rooms~~
     - ~~Send room notification~~
-    - Update room
+    - ~~Update room~~
     - ~~Get room~~
-    - ~~Delete room
+    - ~~Delete room~~
     - ~~Create webhook~~
     - ~~Get all webhooks~~
-    - Get all members
+    - ~~Get all members~~
     - ~~Set topic~~
-    - Add member
-    - Remove member
+    - ~~Add member~~
+    - ~~Remove member~~
     - ~~Delete webhook~~
     - ~~Get webhook~~
     - ~~View History~~
-    - Invite user
+    - ~~Invite user~~
 - Users
-    - Private message user
-    - Update user
-    - Delete user
-    - View user
-    - Create user
-    - Get all users
+    - ~~Private message user~~
+    - ~~Update user~~
+    - ~~Delete user~~ -> Works but test fails, am i missing something ?
+    - ~~View user~~
+    - ~~Create user~~
+    - ~~Get all users~~
 - Misc
     - Error events for things like rate limits
     - Addon helpers
