@@ -12,7 +12,7 @@ var Hipchatter = require(__dirname+'/../hipchatter.js');
 var hipchatter = new Hipchatter(settings.apikey);
 
 /** ENDPOINTS **/
-describe.skip('Capabilities', function(){
+describe('Capabilities', function(){
 
     // Get capabilities
     describe('Get capabilities', function(){

@@ -12,7 +12,7 @@ var Hipchatter = require(__dirname+'/../hipchatter.js');
 var hipchatter;
 
 
-describe.skip('Creating hipchatter object', function(){
+describe('Creating hipchatter object', function(){
   describe('hipchatter', function(){
     hipchatter = new Hipchatter(settings.apikey);
     it('should exists and be an object', function(){
@@ -25,7 +25,7 @@ describe.skip('Creating hipchatter object', function(){
 
 
 /** HELPERS **/
-describe.skip('Helpers', function(){
+describe('Helpers', function(){
     describe('url default', function(){
         var url = hipchatter.url('room/history');
         it('should return a valid URL with the auth token', function(){
