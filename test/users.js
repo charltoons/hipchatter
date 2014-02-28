@@ -11,7 +11,7 @@ catch (e) { console.error('Create test/settings.json and populate with your cred
 var Hipchatter = require(__dirname+'/../hipchatter.js');
 var hipchatter = new Hipchatter(settings.apikey);
 
-describe.skip('Users', function() {
+describe('Users', function() {
 
     // Get all users
     describe('Get All Users', function() {
@@ -44,15 +44,7 @@ describe.skip('Users', function() {
         var err, body;
 
         before(function(done) {
-            hipchatter.create_user({
-                name: 'Test User',
-                title: 'Test User Title',
-                mention_name: 'testMention',
-                is_group_admin: false,
-                timezone: 'UTC',
-                password: '',
-                email: 'testuser@testuser.com'
-            }, function(_err, _body){
+            hipchatter.create_user(settings.disposable_user, function(_err, _body){
                 err = _err;
                 body = _body;
                 done();
@@ -71,7 +63,7 @@ describe.skip('Users', function() {
         var user, err;
 
         before(function(done) {
-            hipchatter.view_user('testuser@testuser.com', function(_err, _user) {
+            hipchatter.view_user(settings.disposable_user.email, function(_err, _user) {
                 err = _err;
                 user = _user;
                 done();
@@ -100,7 +92,7 @@ describe.skip('Users', function() {
                 is_group_admin: false,
                 timezone: 'UTC',
                 password: '',
-                email: 'testuser@testuser.com'
+                email: settings.disposable_user.email
             }, function(_err, _user, _response) {
                 err = _err;
                 response = _response;
@@ -113,7 +105,9 @@ describe.skip('Users', function() {
 
         it('should return status code 204 when the update succeeded', function() {
             expect(response).to.equal(204);
-        });        
+        });
+
+        //TODO check with get_user that the user was actually updated        
     });
 
     //PM User
@@ -121,7 +115,7 @@ describe.skip('Users', function() {
         var err, response;
 
         before(function(done) {
-            hipchatter.send_private_message('testuser@testuser.com', {message: 'Private message for you'}, function(_err, _body, _response) {
+            hipchatter.send_private_message(settings.disposable_user.email, {message: 'Private message for you'}, function(_err, _body, _response) {
                 err = _err;
                 response = _response;
                 done();
@@ -144,7 +138,7 @@ describe.skip('Users', function() {
         var err, response;
 
         before(function(done) {
-            hipchatter.delete_user('testuser@testuser.com', function(_err, _body, _response){
+            hipchatter.delete_user(settings.disposable_user.email, function(_err, _body, _response){
                 err = _err,
                 response = _response;
                 done();

@@ -11,7 +11,7 @@ catch (e) { console.error('Create test/settings.json and populate with your cred
 var Hipchatter = require(__dirname+'/../hipchatter.js');
 var hipchatter = new Hipchatter(settings.apikey);
 
-describe('Rooms -- members', function(){
+describe.skip('Rooms -- members', function(){
 
     // Add a member to a room
     describe('Add a member to a room', function() {
