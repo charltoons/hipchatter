@@ -345,4 +345,5 @@ How to Test
 - Copy `/test/settings.example.json` to `/test/settings.json`
 - Fill out your creds
 - `npm install`
+- `grunt stub` which creates the test room and test user
 - `npm test`

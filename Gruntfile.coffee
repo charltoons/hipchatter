@@ -12,5 +12,5 @@ module.exports = (grunt)->
   grunt.registerTask('clean', ['execute:cleanup'])
   grunt.registerTask('webhooks', ['execute:webhooks'])
 
-  # creates a test room for the tests to operate on based on test/settings.json
-  grunt.registerTask('stub', ['execute:stub'])
+  # creates a test room based on test/settings.json
+  grunt.registerTask('stub', ['clean', 'execute:stub'])
