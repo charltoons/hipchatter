@@ -250,6 +250,25 @@ Hipchatter.prototype = {
         this.request('put', 'room/'+room+'/topic', {topic: topic}, callback);
     },
 
+    /** EXTRAS **/
+    // functions that are not part of the official HipChat API
+
+    // Check if a room exists
+    room_exists: function(room, callback){
+        this.get_room(room, function(err, response){
+            if(err === null){
+                return callback(null, true);
+            }
+            else if (err.message == 'Room not found'){
+                return callback(null, false);
+            }
+            else { 
+                console.log(err)
+                return callback(err)
+            }
+        });
+    },
+
     /** HELPERS **/
 
     // Generator API url
