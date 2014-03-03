@@ -12,7 +12,6 @@ var Hipchatter = require(__dirname+'/../hipchatter.js');
 var hipchatter = new Hipchatter(settings.apikey);
 var ownerId;
 
-/** ENDPOINTS **/
 describe('Rooms -- BREAD', function(){
 
     // BROWSE
@@ -155,6 +154,6 @@ describe('Rooms -- BREAD', function(){
         });
     });
 
-    // TODO check if exists
+
 
 });
