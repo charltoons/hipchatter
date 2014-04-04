@@ -14,7 +14,7 @@ var hipchatter;
 
 describe('Creating hipchatter object', function(){
   describe('hipchatter', function(){
-    hipchatter = new Hipchatter(settings.apikey);
+    hipchatter = new Hipchatter(settings.apikey, settings.endpoint);
     it('should exists and be an object', function(){
       expect(hipchatter).to.exist;
       expect(hipchatter).to.be.an('object');

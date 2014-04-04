@@ -9,7 +9,7 @@ catch (e) { console.error('Create test/settings.json and populate with your cred
 
 // Setup hipchatter
 var Hipchatter = require(__dirname+'/../hipchatter.js');
-var hipchatter = new Hipchatter(settings.apikey);
+var hipchatter = new Hipchatter(settings.apikey, settings.endpoint);
 
 describe('Users', function() {
 
