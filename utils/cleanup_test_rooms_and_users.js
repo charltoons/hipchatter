@@ -4,7 +4,7 @@ var colors = require('colors')
 
 // Setup hipchatter
 var Hipchatter = require(__dirname+'/../hipchatter.js');
-var hipchatter = new Hipchatter(settings.apikey);
+var hipchatter = new Hipchatter(settings.apikey, settings.endpoint);
 
 
 // Unconditionally delete all test and disposable rooms and users
