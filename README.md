@@ -19,12 +19,12 @@ In your project folder:
 ````bash
     npm install hipchatter --save
 ````
-    
+
 In your project's js file:
 ````javascript
     var Hipchatter = require('hipchatter');
-    var hipchatter = new Hipchatter(your_auth_token);
-    
+    var hipchatter = new Hipchatter(your_auth_token [, hipchat_endpoint]);
+
     // this will list all of your rooms
     hipchatter.rooms(function(err, rooms){
         if(!err) console.log(rooms)
