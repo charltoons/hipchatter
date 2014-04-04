@@ -1,13 +1,11 @@
-//  Endpoints
-var API_ROOT = 'https://api.hipchat.com/v2/';
-
 //  Dependencies
 var needle = require('needle');
 var async = require('async');
-  
+
 //  Hipchatter constructor
-var Hipchatter = function(token) {  
+var Hipchatter = function(token, api_root) {  
     this.token = token;
+    this.api_root = api_root || 'https://api.hipchat.com/v2/';
 }
 
 // Turns logging on for debugging
@@ -274,7 +272,7 @@ Hipchatter.prototype = {
     // Generator API url
     url: function(rest_path, query, alternate_token){
         // inner helpers
-        var BASE_URL = API_ROOT + escape(rest_path) + '?auth_token=';
+        var BASE_URL = this.api_root + escape(rest_path) + '?auth_token=';
         var queryString = function(query) {
             var query_string = '';
             for (var key in query) {
