@@ -29,4 +29,7 @@
         "password": "",
         "email": "disposableuser@hipchatter.com"
     }
+
+    // The following is used to test against a hosted instance
+    //, "endpoint": "http://hipchat.internal/v2/"
 }
