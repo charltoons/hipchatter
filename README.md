@@ -333,11 +333,12 @@ hipchatter.set_topic('Hipchatter Room', 'We Are All Talking About This', functio
 
 TODO
 ----
-- Migrate docs to the [wiki](https://github.com/charltoons/hipchatter/wiki)
-- Error events for things like rate limits
-- Addon helpers
-- Add support for `expand` (https://www.hipchat.com/docs/apiv2/expansion)
-- Get the tests to check if the required stubs exist before running
+- [] Get all tests to pass
+- [] Migrate docs to the [wiki](https://github.com/charltoons/hipchatter/wiki)
+- [] Error events for things like rate limits
+- [] Addon helpers
+- [] Add support for `expand` (https://www.hipchat.com/docs/apiv2/expansion)
+- [] Get the tests to check if the required stubs exist before running
 
 How to Test
 -----------
