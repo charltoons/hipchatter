@@ -344,11 +344,11 @@ Hipchatter.prototype = {
         } else if (type.toLowerCase() === 'post') {
             var url = payload.hasOwnProperty('token') ? this.url(path, payload.token) : this.url(path);
 
-            needle.post(url, payload, {json: true}, requestCallback);
+            needle.post(url, payload, {json: true, headers:{'Content-Type': 'application/json; charset=utf-8'}}, requestCallback);
 
         // PUT request 
         } else if (type.toLowerCase() === 'put') {
-            needle.put(this.url(path), payload, {json: true}, requestCallback);
+            needle.put(this.url(path), payload, {json: true, headers:{'Content-Type': 'application/json; charset=utf-8'}}, requestCallback);
 
         // DELETE request 
         } else if (type.toLowerCase() === 'delete') {
