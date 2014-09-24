@@ -248,8 +248,8 @@ hipchatter.create_webhook('Hipchatter Room',
     {
         url: 'http://yourdomain.com',
         event: 'room_message'
-    }, function(err){
-        if (err == null) console.log('Successfully created webhook.');
+    }, function(err, webhook){
+        if (err == null) console.log('Successfully created webhook id:'+webhook.id+'.');
 });
 ````
 
