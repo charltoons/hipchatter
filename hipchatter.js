@@ -187,10 +187,10 @@ Hipchatter.prototype = {
             this.request('post', 'room/'+room+'/notification', {message: message, token: token}, callback);
         }
         else if (typeof options != 'object' && typeof options == 'function') {
-            options(new Error('Must supply an options object to the notify function containing at least the message and the room notification token. See https://www.hipchat.com/docs/apiv2/method/send_room_notification'));
+            options(new Error('Must supply an options object to the notify function containing at least the message. See https://www.hipchat.com/docs/apiv2/method/send_room_notification'));
         }
-        else if (!options.hasOwnProperty('message') || (!options.hasOwnProperty('token'))) {
-            callback(new Error('Message and Room Notification token are required.'));
+        else if (!options.hasOwnProperty('message') ) {
+            callback(new Error('Message is required.'));
         }
         else this.request('post', 'room/'+room+'/notification', options, callback);
     },
