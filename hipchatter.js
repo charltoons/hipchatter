@@ -3,7 +3,7 @@ var needle = require('needle');
 var async = require('async');
 
 //  Hipchatter constructor
-var Hipchatter = function(token, api_root) {  
+var Hipchatter = function(token, api_root) {
     this.token = token;
     this.api_root = api_root || 'https://api.hipchat.com/v2/';
 }
@@ -77,10 +77,14 @@ Hipchatter.prototype = {
     },
     // Get all users
     // https://www.hipchat.com/docs/apiv2/method/get_all_users
-    users: function(callback) {
-        this.request('get', 'user', function(err, results) {
+    users: function(params, callback) {
+        if (this.isFunction(params)) { // No payload
+            callback = params;
+            params = {};
+        }
+        this.request('get', 'user', params, function(err, results) {
             if(err) callback(err);
-            else callback(err, results.items)
+            else callback(err, results.items);
         });
     },
 
@@ -98,7 +102,7 @@ Hipchatter.prototype = {
     // https://www.hipchat.com/docs/apiv2/method/create_user
     create_user: function(params, callback) {
         this.request('post', 'user', params, callback);
-    },    
+    },
     // Deletes a user
     // https://www.hipchat.com/docs/apiv2/method/delete_user
     delete_user: function(user, callback) {
@@ -120,7 +124,7 @@ Hipchatter.prototype = {
     // }
     //
     // or
-    // 
+    //
     // Get emoticon by shortcut or id
     // https://www.hipchat.com/docs/apiv2/method/get_emoticon
     //
@@ -230,7 +234,7 @@ Hipchatter.prototype = {
         var self = this;
         this.webhooks(room, function(err, response){
             if (err) return callback(new Error(response));
-            
+
             var hooks = response.items;
             var hookCalls = [];
             for (var i=0; i<hooks.length; i++){
@@ -260,7 +264,7 @@ Hipchatter.prototype = {
             else if (err.message == 'Room not found'){
                 return callback(null, false);
             }
-            else { 
+            else {
                 console.log(err)
                 return callback(err)
             }
@@ -307,9 +311,9 @@ Hipchatter.prototype = {
 
     // Make a request
     // type: required - type of REST request ('get' or 'post' currently)
-    // path: required - 
-    // payload: optional - query string data for 'get', '' 
-    // callback: required -      
+    // path: required -
+    // payload: optional - query string data for 'get', ''
+    // callback: required -
     request: function(type, path, payload, callback){
         if (this.isFunction(payload)) { // No payload
             callback = payload;
@@ -337,7 +341,6 @@ Hipchatter.prototype = {
         // GET request
         if (type.toLowerCase() === 'get') {
             var url = payload.hasOwnProperty('token') ? this.url(path, payload, payload.token) : this.url(path, payload);
-
             needle.get(url, requestCallback);
 
         // POST request
@@ -346,16 +349,16 @@ Hipchatter.prototype = {
 
             needle.post(url, payload, {json: true, headers:{'Content-Type': 'application/json; charset=utf-8'}}, requestCallback);
 
-        // PUT request 
+        // PUT request
         } else if (type.toLowerCase() === 'put') {
             needle.put(this.url(path), payload, {json: true, headers:{'Content-Type': 'application/json; charset=utf-8'}}, requestCallback);
 
-        // DELETE request 
+        // DELETE request
         } else if (type.toLowerCase() === 'delete') {
             needle.delete(this.url(path), {}, requestCallback);
 
-        // otherwise, something went wrong   
-        } else { 
+        // otherwise, something went wrong
+        } else {
             callback(new Error('Invalid use of the hipchatter.request function.'));
         }
     },
