@@ -4,7 +4,7 @@ var expect = chai.expect;
 var colors = require("colors");
 
 // Make sure the API Credentials are present
-try { var settings = require(__dirname+"/settings.json"); } 
+try { var settings = require(__dirname+"/settings.json"); }
 catch (e) { console.error('Create test/settings.json and populate with your credentials.'.red);}
 
 // Setup hipchatter
@@ -21,6 +21,32 @@ describe('Users', function() {
         // Make the request
         before(function(done){
             hipchatter.users(function(_err, _users){
+                err = _err;
+                users = _users;
+                done();
+            });
+        });
+        it('should not return an error', function(){
+            expect(err).to.be.null;
+        });
+        it('should return a list of users', function(){
+            expect(users).to.be.ok;
+            expect(users).to.not.be.empty;
+        });
+        it('should return users that have an id and name, at least', function(){
+            expect(users[0]).to.have.property('name');
+            expect(users[0]).to.have.property('id');
+        });
+    });
+
+    // Get all users
+    describe('Get All Users with Options', function() {
+        // Set scope for the responses
+        var err, users;
+
+        // Make the request
+        before(function(done){
+            hipchatter.users({"max-results": 1000}, function(_err, _users){
                 err = _err;
                 users = _users;
                 done();
@@ -77,7 +103,7 @@ describe('Users', function() {
             expect(user).to.have.property('title');
             expect(user).to.have.property('name');
         });
-        
+
     });
 
     // Update user
@@ -107,7 +133,7 @@ describe('Users', function() {
             expect(response).to.equal(204);
         });
 
-        //TODO check with get_user that the user was actually updated        
+        //TODO check with get_user that the user was actually updated
     });
 
     //PM User
@@ -129,7 +155,7 @@ describe('Users', function() {
         it('should return status code 204 when the private message is succesfully send', function() {
             expect(response).to.equal(204);
         });
-        
+
     });
 
     //Deleting a user works, but i don't get the correct response code, API bug or am i missing something.
@@ -153,5 +179,5 @@ describe('Users', function() {
 
     });
 
-    
+
 });

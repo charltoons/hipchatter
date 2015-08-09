@@ -143,6 +143,30 @@ hipchatter.history('Hipchatter Room', function(err, history){
 });
 ````
 
+### hipchatter.users
+Returns all of the users.
+
+**Parameters:**
+
+- `param` (object) - Optional. query string parameters (optional)
+    - `'start-index': <int>` - Optional. The start index for the result set. Defaults to `0`.
+    - `'max-results': <int>` - Optional. The maximum number of results. Defaults to `100`.
+    - `'include-guests': <boolean>` - Optional. Include active guest users in response. Otherwise, no guest users will be included. Defaults to `'false'`.
+    - `'include-deleted': <boolean>` - Optional. Include deleted users in response. Defaults to`'false'`.
+
+**Results:** `err`, response (array: list of users)
+#### Usage
+````javascript
+// default: returns array of all emoticons
+hipchatter.users(function(err, users){
+    console.log(users);
+});
+
+hipchatter.emoticons({'start-index': 20, 'max-results': 40}, function(err, users){
+   console.log(users);
+});
+````
+
 ### hipchatter.emoticons
 Returns up to 100 emoticons.
 > [HipChat API reference](https://www.hipchat.com/docs/apiv2/method/get_all_emoticons)
@@ -344,7 +368,7 @@ How to Test
 -----------
 - Clone this repo
 - Copy `/test/settings.example.json` to `/test/settings.json`
-- Fill out your creds
+- Fill out your creds and strip comments from the JSON
 - `npm install`
 - `grunt stub` which creates the test room and test user
 - `npm test`
