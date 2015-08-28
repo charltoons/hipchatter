@@ -319,7 +319,7 @@ Remove a webhook.
 
 #### Usage
 ````javascript
-hipchatter.deleted_webhook('Hipchatter Room', '12345', function(err){
+hipchatter.delete_webhook('Hipchatter Room', '12345', function(err){
         if (err == null) console.log('Webhook sucessfully deleted');
 });
 ````
