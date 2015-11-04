@@ -21,7 +21,7 @@
   },
   "main": "hipchatter.js",
   "dependencies": {
-    "needle": "~0.6.3",
+    "needle": "^0.10.0",
     "async": "~0.2.9"
   },
   "engines": {
