@@ -139,7 +139,7 @@ The history of one room.
 ````javascript
 hipchatter.history('Hipchatter Room', function(err, history){
     // print the last message
-    console.log(history.items[items.length-1].message);
+    console.log(history.items[history.items.length-1].message);
 });
 ````
 
