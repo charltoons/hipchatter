@@ -315,6 +315,7 @@ Hipchatter.prototype = {
     // payload: optional - query string data for 'get', ''
     // callback: required -
     request: function(type, path, payload, callback){
+        self = this;
         if (this.isFunction(payload)) { // No payload
             callback = payload;
             payload = {};
@@ -334,7 +335,9 @@ Hipchatter.prototype = {
 
             // Everything worked
             else {
+                if (self.isFunction(callback)) {
                 callback(null, body, response.statusCode);
+                }
             }
         };
 
@@ -359,7 +362,9 @@ Hipchatter.prototype = {
 
         // otherwise, something went wrong
         } else {
+            if (self.isFunction(callback)) {
             callback(new Error('Invalid use of the hipchatter.request function.'));
+            }
         }
     },
 
