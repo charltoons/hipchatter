@@ -18,15 +18,7 @@ describe('Rooms -- notifications', function(){
 
         it('should throw an error if no object is passed', function(done){
             hipchatter.notify(settings.test_room, function(err, response, body){
-                expect(err.message).to.equal('Must supply an options object to the notify function containing at least the message and the room notification token. See https://www.hipchat.com/docs/apiv2/method/send_room_notification');
-                done();
-            });
-        });
-
-        it('should throw an error if required options aren\'t passed', function(done){
-
-           hipchatter.notify(settings.test_room, {message: "No Auth token"}, function(err, response){
-                expect(err.message).to.equal('Message and Room Notification token are required.');
+                expect(err.message).to.contain('options object to the notify function');
                 done();
             });
         });
