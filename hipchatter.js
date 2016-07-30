@@ -261,7 +261,7 @@ Hipchatter.prototype = {
             if(err === null){
                 return callback(null, true);
             }
-            else if (err.message == 'Room not found'){
+            else if (err.message.match(/Room .* not found/)){
                 return callback(null, false);
             }
             else {
