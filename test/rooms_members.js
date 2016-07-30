@@ -4,20 +4,25 @@ var expect = chai.expect;
 var colors = require("colors");
 
 // Make sure the API Credentials are present
-try { var settings = require(__dirname+"/settings.json"); } 
+try { var settings = require(__dirname+"/settings.json"); }
 catch (e) { console.error('Create test/settings.json and populate with your credentials.'.red);}
 
 // Setup hipchatter
 var Hipchatter = require(__dirname+'/../hipchatter.js');
 var hipchatter = new Hipchatter(settings.apikey, settings.endpoint);
 
+/*
+ * May need to create a test user for these tests to work
+ *
+ *    node utils/create_test_users
+*/
 describe('Rooms -- members', function(){
 
     // Add a member to a room
     describe('Add a member to a room', function() {
         var err, response, params;
         params = {
-            room_name: settings.test_room, 
+            room_name: settings.test_room,
             user_email: settings.test_user.email
         };
 
@@ -36,14 +41,14 @@ describe('Rooms -- members', function(){
         it('should return status code 204 when the user is succesfully added to the room', function() {
             expect(response).to.equal(204);
         });
-        
+
     });
 
     // Add a member to a room
     describe('Invite a member to a room', function() {
         var err, response, params;
         params = {
-            room_name: settings.test_room, 
+            room_name: settings.test_room,
             user_email: settings.test_user.email
         };
 
@@ -62,14 +67,14 @@ describe('Rooms -- members', function(){
         it('should return status code 204 when the user is succesfully invited to the room', function() {
             expect(response).to.equal(204);
         });
-        
+
     });
 
      // Remove a member from a room
     describe('Remove a member from a room', function() {
         var err, response, params;
         params = {
-            room_name: settings.test_room, 
+            room_name: settings.test_room,
             user_email: settings.test_user.email
         };
 
@@ -88,6 +93,6 @@ describe('Rooms -- members', function(){
         it('should return status code 204 when the user is succesfully removed from the room', function() {
             expect(response).to.equal(204);
         });
-        
+
     });
 });
