@@ -4,7 +4,7 @@ var expect = chai.expect;
 var colors = require("colors");
 
 // Make sure the API Credentials are present
-try { var settings = require(__dirname+"/settings.json"); } 
+try { var settings = require(__dirname+"/settings.json"); }
 catch (e) { console.error('Create test/settings.json and populate with your credentials.'.red);}
 
 // Setup hipchatter
@@ -16,7 +16,7 @@ describe('Rooms -- BREAD', function(){
 
     // BROWSE
     describe('Get all rooms', function(){
-        
+
         // Set scope for the responses
         var err, rooms;
 
@@ -43,7 +43,7 @@ describe('Rooms -- BREAD', function(){
 
     // ADD
     describe('Create room', function(){
-        
+
         // Set scope for the responses
         var err, room;
 
@@ -71,11 +71,11 @@ describe('Rooms -- BREAD', function(){
         });
     });
 
-    
+
 
     // READ
     describe('Get room', function(){
-        
+
         // Set scope for the responses
         var err, room;
 
@@ -101,25 +101,24 @@ describe('Rooms -- BREAD', function(){
         });
         it('should return an error if the room does not exist', function(done){
             hipchatter.get_room('non-existent room', function(err){
-                expect(err.message).to.equal('Room not found');
-
+                expect(err.message).to.contain('not found');
                 done();
             });
         });
     });
 
     // EDIT
-    describe('Update room', function(){        
-        // Set scope for the responses        
+    describe('Update room', function(){
+        // Set scope for the responses
         var err, status;
         // Make the request
-        before(function(done){            
-            hipchatter.update_room( { 
-                name: settings.disposable_room, 
-                privacy: 'private', 
-                is_archived: false, 
-                is_guest_accessible: false, 
-                topic: "New Topic", 
+        before(function(done){
+            hipchatter.update_room( {
+                name: settings.disposable_room,
+                privacy: 'private',
+                is_archived: false,
+                is_guest_accessible: false,
+                topic: "New Topic",
                 owner: {id: ownerId}
             }, function(_err, _body, _status) {
                     err = _err;
@@ -133,12 +132,12 @@ describe('Rooms -- BREAD', function(){
         });
         it('should return status code 204', function() {
             expect(status).to.equal(204);
-        });        
+        });
     });
 
     // DELETE
     describe('Delete room', function(){
-        
+
         // Set scope for the responses
         var err;
 
