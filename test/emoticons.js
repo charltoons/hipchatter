@@ -4,12 +4,18 @@ var expect = chai.expect;
 var colors = require("colors");
 
 // Make sure the API Credentials are present
-try { var settings = require(__dirname+"/settings.json"); } 
+try { var settings = require(__dirname+"/settings.json"); }
 catch (e) { console.error('Create test/settings.json and populate with your credentials.'.red);}
 
 // Setup hipchatter
 var Hipchatter = require(__dirname+'/../hipchatter.js');
 var hipchatter = new Hipchatter(settings.apikey, settings.endpoint);
+
+// tester emoticon
+var EMOTICON = {
+  ID: 105216,
+  SHORTCUT: 'allthethings'
+}
 
 // Get emoticon(s)
 describe('Emoticons', function(){
@@ -78,7 +84,7 @@ describe('Emoticons', function(){
         // Set scope for the responses
         var err, emoticons;
         var options = {
-            'puppets': 10, 
+            'puppets': 10,
             'isCat': true
         };
 
@@ -111,7 +117,7 @@ describe('Emoticons', function(){
 
         // Make the request
         before(function(done){
-            hipchatter.emoticons(34, function(_err, _emoticon){
+            hipchatter.emoticons(EMOTICON.ID, function(_err, _emoticon){
                 err = _err;
                 emoticon = _emoticon;
                 done();
@@ -126,10 +132,10 @@ describe('Emoticons', function(){
         });
         it('should return an emoticon with required properties', function(){
             expect(emoticon).to.not.be.empty;
-            expect(emoticon).to.have.property('id', 34);
+            expect(emoticon).to.have.property('id', EMOTICON.ID);
             expect(emoticon).to.have.property('url');
             expect(emoticon).to.have.property('links');
-            expect(emoticon).to.have.property('shortcut', 'menorah');
+            expect(emoticon).to.have.property('shortcut', EMOTICON.SHORTCUT);
         });
     });
     describe('Get specific emoticon by shortcut', function(){
@@ -138,7 +144,7 @@ describe('Emoticons', function(){
 
         // Make the request
         before(function(done){
-            hipchatter.emoticons('fonzie', function(_err, _emoticon){
+            hipchatter.emoticons(EMOTICON.SHORTCUT, function(_err, _emoticon){
                 err = _err;
                 emoticon = _emoticon;
                 done();
@@ -153,10 +159,10 @@ describe('Emoticons', function(){
         });
         it('should return an emoticon with required properties', function(){
             expect(emoticon).to.not.be.empty;
-            expect(emoticon).to.have.property('id', 41842);
+            expect(emoticon).to.have.property('id', EMOTICON.ID);
             expect(emoticon).to.have.property('url');
             expect(emoticon).to.have.property('links');
-            expect(emoticon).to.have.property('shortcut', 'fonzie');
+            expect(emoticon).to.have.property('shortcut', EMOTICON.SHORTCUT);
         });
     });
 });
