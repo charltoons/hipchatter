@@ -4,7 +4,7 @@ var expect = chai.expect;
 var colors = require("colors");
 
 // Make sure the API Credentials are present
-try { var settings = require(__dirname+"/settings.json"); } 
+try { var settings = require(__dirname+"/settings.json"); }
 catch (e) { console.error('Create test/settings.json and populate with your credentials.'.red);}
 
 // Setup hipchatter
@@ -36,7 +36,7 @@ describe('Rooms -- operations', function(){
         });
         it('should return an error if the room does not exist', function(done){
             hipchatter.history('non-existent room', function(err){
-                expect(err.message).to.equal('Room not found');
+                expect(err.message).to.contain('not found');
                 done();
             });
         });
