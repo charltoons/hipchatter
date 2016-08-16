@@ -276,7 +276,7 @@ Hipchatter.prototype = {
     // Generator API url
     url: function(rest_path, query, alternate_token){
         // inner helpers
-        var BASE_URL = this.api_root + escape(rest_path) + '?auth_token=';
+        var BASE_URL = this.api_root + rest_path + '?auth_token=';
         var queryString = function(query) {
             var query_string = '';
             for (var key in query) {
