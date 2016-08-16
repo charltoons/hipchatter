@@ -200,6 +200,9 @@ Hipchatter.prototype = {
     },
     send_room_message: function(room, message, callback){
         //https://www.hipchat.com/docs/apiv2/method/send_message
+        if (typeof message == "string") {
+            message = {message: message};
+        }
         this.request('post', 'room/'+room+'/message', message, callback);
     },
     create_webhook: function(room, options, callback){
