@@ -23,7 +23,7 @@ In your project folder:
 In your project's js file:
 ````javascript
     var Hipchatter = require('hipchatter');
-    var hipchatter = new Hipchatter(your_auth_token [, hipchat_endpoint]);
+    var hipchatter = new Hipchatter(your_auth_token [, hipchat_api_root]);
 
     // this will list all of your rooms
     hipchatter.rooms(function(err, rooms){
