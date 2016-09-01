@@ -327,6 +327,51 @@ Hipchatter.prototype = {
             // Connection error
             if (!!error) callback(new Error('HipChat API Error.'));
 
+            // Rate limit error
+            else if (response.statusCode == 429) {
+                var apitimeout, floodtimeout, reset, timeout;
+
+                error = body.error.message || body.error.toString();
+
+                //check if we hit the api rate limit
+                reset = response.headers["x-ratelimit-reset"] * 1000;
+                if (reset > 0) {
+                    //assume that the reset value will be the unix timestamp
+                    //when the limiter will reset
+                    apitimeout = reset - (new Date());
+
+                    //if out timeout period is negative, that is probably
+                    //because instead of a unix timestamp, the reset value
+                    //is the number of seconds until the counter will reset.
+                    apitimeout = (apitimeout < 0 ? reset : apitimeout);
+                }
+            
+                //do the same for flood control
+                reset = response.headers["x-floodcontrol-reset"] * 1000;
+                if (reset > 0) {
+                    floodtimeout = reset - (new Date());
+                    floodtimeout = (floodtimeout<0 ? reset : floodtimeout); 
+                }
+
+                //choose which ever timeout is bigger.
+                //If neither are valid, just set it to 5 minutes
+                timeout =
+                  Math.max((+apitimeout || 0), (+floodtimeout || 0)) ||
+                  300000;
+
+                //wait until it is safe to resend the request
+                setTimeout(
+                    self.request.bind(self, type, path, payload, callback),
+                    timeout
+                );
+                if(DEBUG){
+                    console.log(
+                        "Rate limit reached. Waiting " + timeout +
+                        " ms before resubmitting."
+                    );
+                }
+            }
+
             // HipChat returned an error or no HTTP Success status code
             else if (body.hasOwnProperty('error') || response.statusCode < 200 || response.statusCode >= 300){
                 try { callback(new Error(body.error.message)); }
