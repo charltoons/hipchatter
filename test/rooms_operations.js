@@ -52,4 +52,24 @@ describe('Rooms -- operations', function(){
             });
         });
     });
+    describe('Post a message to a room', function() {
+        var err, response;
+
+        before(function(done) {
+            hipchatter.send_room_message(settings.test_room, "Room message", function(_err, _body, _response) {
+                err = _err;
+                response = _response;
+                done();
+            });
+        });
+
+        it('should not return an error', function() {
+            expect(err).to.be.null;
+        });
+
+        it('should return status code 201 when the message is posted', function() {
+            expect(response).to.equal(201);
+        });
+
+    });
 });

@@ -198,6 +198,13 @@ Hipchatter.prototype = {
         }
         else this.request('post', 'room/'+room+'/notification', options, callback);
     },
+    send_room_message: function(room, message, callback){
+        //https://www.hipchat.com/docs/apiv2/method/send_message
+        if (typeof message == "string") {
+            message = {message: message};
+        }
+        this.request('post', 'room/'+room+'/message', message, callback);
+    },
     create_webhook: function(room, options, callback){
         if (typeof options != 'object' && typeof options == 'function') {
             options(new Error('Must supply an options object to the notify function containing at least the message and the room notification token. See https://www.hipchat.com/docs/apiv2/method/send_room_notification'));
@@ -251,7 +258,7 @@ Hipchatter.prototype = {
     set_topic: function(room, topic, callback){
         this.request('put', 'room/'+room+'/topic', {topic: topic}, callback);
     },
-
+    
     /** EXTRAS **/
     // functions that are not part of the official HipChat API
 
