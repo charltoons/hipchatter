@@ -221,21 +221,7 @@ Hipchatter.prototype = {
         this.request('get', 'room/'+room+'/webhook', callback);
     },
     delete_webhook: function(room, id, callback){
-        needle.delete(this.url('room/'+room+'/webhook/'+id), null, function (error, response, body) {
-            // Connection error
-            if (!!error) callback(new Error('HipChat API Error.'));
-
-            // HipChat returned an error or no HTTP Success status code
-            else if (body.hasOwnProperty('error') || response.statusCode < 200 || response.statusCode >= 300){
-                try { callback(new Error(body.error.message)); }
-                catch (e) {callback(new Error(body)); }
-            }
-
-            // Everything worked
-            else {
-                callback(null, body);
-            }
-        });
+        this.request('delete', 'room/'+room+'/webhook/'+id, callback);
     },
     delete_all_webhooks: function(room, callback){
         var self = this;
