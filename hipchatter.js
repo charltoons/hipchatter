@@ -1,6 +1,9 @@
-//  Dependencies
-var needle = require('needle');
-var async = require('async');
+var
+    https = require('https'),
+    parseURL = require('url').parse,
+    VALIDMETHODS = {
+        PUT:{postish:1},POST:{postish:1},GET:{getish:1},DELETE:{getish:1}
+    };
 
 //  Hipchatter constructor
 var Hipchatter = function(token, api_root) {
@@ -176,7 +179,7 @@ Hipchatter.prototype = {
     //         color: 'green',
     //         message: message
     //     }
-    //     needle.post(this.url('room/'+room+'/message', token), data, {json:true}, function(error, res, body){
+    //     this.request("post", this.buildURL('room/'+room+'/message', token), data, function(error, res, body){
     //         if (!error && res.statusCode == 204) { callback(null, body); }
     //         else callback(error, 'API connection error.');
     //     });
@@ -221,7 +224,7 @@ Hipchatter.prototype = {
         this.request('get', 'room/'+room+'/webhook', callback);
     },
     delete_webhook: function(room, id, callback){
-        needle.delete(this.url('room/'+room+'/webhook/'+id), null, function (error, response, body) {
+        this.request("delete", this.buildURL('room/'+room+'/webhook/'+id), function (error, response, body) {
             // Connection error
             if (!!error) callback(new Error('HipChat API Error.'));
 
@@ -243,16 +246,21 @@ Hipchatter.prototype = {
             if (err) return callback(new Error(response));
 
             var hooks = response.items;
-            var hookCalls = [];
-            for (var i=0; i<hooks.length; i++){
-                // wrapper function to preserve context of hookId
-                (function(hookId){
-                    hookCalls[i] = function(done){
-                        self.delete_webhook(room, hookId, done);
-                    }
-                })(hooks[i].id);
-            }
-            async.parallel(hookCalls, callback);
+            Promise.all(hooks.map((hook)=>new Promise((resolve)=>
+                self.delete_webhook(room, hook.id,
+                    (error,body)=>{resolve({error,body})}
+                )
+            ))).then((result)=>{
+                var
+                  error = [],
+                  body = [];
+                result.forEach(result=>{
+                    error.push(result.error);
+                    body.push(result.body);
+                });
+
+                callback((error.length ? error : null), body);
+            });
         });
     },
     set_topic: function(room, topic, callback){
@@ -281,7 +289,7 @@ Hipchatter.prototype = {
     /** HELPERS **/
 
     // Generator API url
-    url: function(rest_path, query, alternate_token){
+    buildURL: function(rest_path, query, alternate_token){
         // inner helpers
         var BASE_URL = this.api_root + rest_path + '?auth_token=';
         var queryString = function(query) {
@@ -321,18 +329,68 @@ Hipchatter.prototype = {
     // path: required -
     // payload: optional - query string data for 'get', ''
     // callback: required -
-    request: function(type, path, payload, callback){
-        self = this;
+    request: function(method, path, payload, callback){
         if (this.isFunction(payload)) { // No payload
             callback = payload;
             payload = {};
         }
+        method = (method + "").toUpperCase();
+
+        if (!VALIDMETHODS[method]) {
+            if (this.isFunction(callback)) {
+                callback(new Error(
+                    'Invalid use of the hipchatter.request function.'
+                ));
+                return;
+            }
+        }
+
+        var
+            self = this,
+            url = parseURL(
+                payload && VALIDMETHODS[method].getish? (
+                    payload.hasOwnProperty('token') ?
+                        this.buildURL(path, payload, payload.token) :
+                        this.buildURL(path, payload)
+                ) : this.buildURL(path)
+            ),
+            req = https.request(
+                {
+                    hostname: url.hostname,
+                    path: url.path,
+                    //headers are only needed for put/post,
+                    //but wont hurt get/delete
+                    headers: {'Content-Type':'application/json; charset=utf-8'},
+                    method
+                }, (res)=>{
+                    var body = "";
+                    res.setEncoding('utf8');
+                    res.on('data', (data) => {
+                        body = body + data;
+                    });
+                    res.on('end', () => {
+                        requestCallback(null, res, body);
+                    });
+                    res.on('error', (err)=> {
+                        requestCallback(err);
+                    });
+                }
+            );
+
+        if (VALIDMETHODS[method].postish) {
+            try {
+                req.write(JSON.stringify(payload));
+            } catch (err) {
+                requestCallback(err);
+            }
+        }
+        req.end();
 
         var requestCallback = function (error, response, body) {
             if (DEBUG) {console.log('RESPONSE: ', error, response, body);}
 
             // Connection error
-            if (!!error) callback(new Error('HipChat API Error.'));
+            if (!!error) callback(new Error('HipChat API Error.' + error));
 
             // Rate limit error
             else if (response.statusCode == 429) {
@@ -368,7 +426,7 @@ Hipchatter.prototype = {
 
                 //wait until it is safe to resend the request
                 setTimeout(
-                    self.request.bind(self, type, path, payload, callback),
+                    self.request.bind(self, method, path, payload, callback),
                     timeout
                 );
                 if(DEBUG){
@@ -392,32 +450,6 @@ Hipchatter.prototype = {
                 }
             }
         };
-
-        // GET request
-        if (type.toLowerCase() === 'get') {
-            var url = payload.hasOwnProperty('token') ? this.url(path, payload, payload.token) : this.url(path, payload);
-            needle.get(url, requestCallback);
-
-        // POST request
-        } else if (type.toLowerCase() === 'post') {
-            var url = payload.hasOwnProperty('token') ? this.url(path, payload.token) : this.url(path);
-
-            needle.post(url, payload, {json: true, headers:{'Content-Type': 'application/json; charset=utf-8'}}, requestCallback);
-
-        // PUT request
-        } else if (type.toLowerCase() === 'put') {
-            needle.put(this.url(path), payload, {json: true, headers:{'Content-Type': 'application/json; charset=utf-8'}}, requestCallback);
-
-        // DELETE request
-        } else if (type.toLowerCase() === 'delete') {
-            needle.delete(this.url(path), {}, requestCallback);
-
-        // otherwise, something went wrong
-        } else {
-            if (self.isFunction(callback)) {
-            callback(new Error('Invalid use of the hipchatter.request function.'));
-            }
-        }
     },
 
     isFunction: function(obj) {

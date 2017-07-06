@@ -21,10 +21,6 @@
     "url": "https://github.com/charltoons/hipchatter.git"
   },
   "main": "hipchatter.js",
-  "dependencies": {
-    "async": "~0.2.9",
-    "needle": "^1.0.0"
-  },
   "engines": {
     "node": "*"
   },
