@@ -389,6 +389,15 @@ Hipchatter.prototype = {
         var requestCallback = function (error, response, body) {
             if (DEBUG) {console.log('RESPONSE: ', error, response, body);}
 
+            //parse JSON if needed
+            if (response.headers["content-type"]==="application/json") {
+                try {
+                    body = JSON.parse(body);
+                } catch(err) {
+                    error = "Content-Type is JSON, but could not parse: " + err
+                }
+            }
+
             // Connection error
             if (!!error) callback(new Error('HipChat API Error.' + error));
 
