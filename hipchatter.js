@@ -224,9 +224,9 @@ Hipchatter.prototype = {
         this.request('get', 'room/'+room+'/webhook', callback);
     },
     delete_webhook: function(room, id, callback){
-        this.request("delete", this.buildURL('room/'+room+'/webhook/'+id), function (error, response, body) {
+        this.request("delete", 'room/'+room+'/webhook/'+id, function (error, response, body) {
             // Connection error
-            if (!!error) callback(new Error('HipChat API Error.'));
+            if (!!error) callback(new Error('HipChat API Error: ' + error));
 
             // HipChat returned an error or no HTTP Success status code
             else if (body.hasOwnProperty('error') || response.statusCode < 200 || response.statusCode >= 300){
