@@ -22,6 +22,12 @@ Hipchatter.prototype = {
         this.request('get', 'capabilities', {'token': ''}, callback);
     },
 
+    // Get auto join rooms
+    // https://www.hipchat.com/docs/apiv2/method/get_auto_join_rooms
+    get_auto_join_rooms: function(email, params, callback) {
+        this.request('get', 'user/'+email+'/preference/auto-join', params, callback);
+    },
+
     // Updates a room
     // https://www.hipchat.com/docs/apiv2/method/update_room
     update_room: function(params, callback) {
